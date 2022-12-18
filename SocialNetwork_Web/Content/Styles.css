@@ -1,0 +1,39 @@
+﻿body {
+    height: auto;
+    background: #8360c3;
+    background: linear-gradient(90deg, #8360c3 0%, #240b36 100%);
+    font-family:cursive;
+}
+
+.MainContainer {
+    width: 30%;
+    color: white;
+    margin-top: 10vh;
+    border-radius: 1rem;
+    height: 65vh;
+    min-width: 360px;
+    background-color: rgb(32, 30, 30);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 3fr 2fr;
+}
+
+.headingSec {
+    text-align: center;
+    /* border: 1px solid white; */
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signupSec {
+    border-top: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formSec {
+    border-top: 1px solid white;
+}

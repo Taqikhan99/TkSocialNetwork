@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Styles.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div class="container MainContainer">
+
+        <div class="headingSec">
+            <h1>TkSocial</h1>
+        </div>
+        <div class="formSec p-3 pt-5">
+            <form action="">
+                <div class="mb-4">
+
+                    <input type="email" class="form-control" id="emailid" placeholder="Enter Email">
+
+                </div>
+                <div class="mb-4">
+
+                    <input type="password" class="form-control" id="passwordid" placeholder="Enter Password">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Login</button>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="signupSec">
+            <p class="text-center">Dont have an account? @Html.ActionLink("Register","Signup")</p>
+
+        </div>
+
+    </div>
+    
+
+</body>
+</html>
