@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -131,6 +132,8 @@
     <Content Include="Scripts\jquery-3.5.0.min.map" />
     <Content Include="Views\Accounts\Login.cshtml" />
     <Content Include="Views\Accounts\Signup.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Accounts\ErrorPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -141,6 +144,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SocialNetwork_Dal\SocialNetwork_Dal.csproj">
+      <Project>{BE81D759-912B-41CE-87C2-7DBC9681FDF9}</Project>
+      <Name>SocialNetwork_Dal</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

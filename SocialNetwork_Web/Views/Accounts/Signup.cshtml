@@ -8,10 +8,55 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Styles.css" rel="stylesheet" />
     <title>Signup</title>
 </head>
 <body>
-    <div> 
+    <div class="container MainContainer">
+
+        <div class="headingSec">
+            <h1>TkSocial</h1>
+        </div>
+        <div class="formSec p-3 pt-5">
+            <form action="">
+                <div class="mb-4">
+
+                    <input type="email" class="form-control" id="emailid" name="Email" placeholder="Enter Email">
+
+                </div>
+                <div class="mb-4">
+
+                    <input type="text" class="form-control" id="firstname" name="FirstName" placeholder="Enter First Name">
+
+                </div>
+                <div class="mb-4">
+
+                    <input type="text" class="form-control" id="lastname" name="LastName" placeholder="Enter Last Name">
+
+                </div>
+                <div class="mb-4">
+
+                    <input type="text" class="form-control" id="phone" name="Phone" placeholder="Enter PhoneNumber">
+
+                </div>
+
+                <div class="mb-4">
+
+                    <input type="password" class="form-control" id="passwordid" name="Password" placeholder="Enter Password">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Register</button>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="signupSec">
+            <p class="text-center">Already Registered? @Html.ActionLink("Login", "Login")</p>
+
+        </div>
+
     </div>
 </body>
 </html>
