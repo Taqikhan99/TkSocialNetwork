@@ -22,10 +22,7 @@ namespace SocialNetwork_Dal.concrete
         //procedure call for insert
         public bool execInsertProc(string procname, List<SqlParameter> sqlParameters)
         {
-            try
-            {
                 int i = 0;
-
 
                 using (SqlCommand cmd = new SqlCommand(procname, con))
                 {
@@ -48,8 +45,7 @@ namespace SocialNetwork_Dal.concrete
                     return true;
                 }
                 return false;
-            }
-            catch (Exception ex) { return false; }
+           
 
 
         }

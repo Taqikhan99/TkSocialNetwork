@@ -8,14 +8,18 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork_Dal.Entities
 {
-    public class UserSignup
+    public class User
     {
         public int Id { get; set; }
-        [Required(ErrorMessage ="First name is required!")]
+        [Required(ErrorMessage ="First name is required!"), MaxLength(30)]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "Last name is required!")]
+        [Required(ErrorMessage = "Last name is required!"), MaxLength(30)]
         public string LastName { get; set; }
+
         [Required(ErrorMessage = "Email is required!")]
+        [DataType(DataType.EmailAddress)]
+        
+        [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Email is not valid.")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Phone is required!")]
         public string Phone  { get; set; }
@@ -23,5 +27,6 @@ namespace SocialNetwork_Dal.Entities
         public string Password { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
     }
 }
