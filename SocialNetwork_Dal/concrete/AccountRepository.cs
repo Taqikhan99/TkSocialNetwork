@@ -15,15 +15,15 @@ namespace SocialNetwork_Dal.concrete
     {
 
         DbClass db = new DbClass();
-        private SqlConnection con;
-        string constr = ConfigurationManager.ConnectionStrings["dbConn"].ToString();
+        //private SqlConnection con;
+        //string constr = ConfigurationManager.ConnectionStrings["dbConn"].ToString();
 
         public AccountRepository()
         {
-            con = new SqlConnection(constr);
+            
         }
-
-        //Registering new User
+        //Verify if login is correct or not!
+       
         public User LoginUser(UserLoginCheck user)
         {
 
@@ -31,12 +31,13 @@ namespace SocialNetwork_Dal.concrete
             sqlParameters.Add(new SqlParameter("@Email", user.Email));
             sqlParameters.Add(new SqlParameter("@Password", user.Password));
 
-            User user1 = new User();
+            User user1 = null;
 
             DataTable dt = db.execGetProc("spLoginUser", sqlParameters);
 
             if(dt.Rows.Count > 0)
             {
+                user1 = new User();
                 DataRow r = dt.Rows[0];
                 user1.FirstName = r["FirstName"].ToString();
                 user1.LastName = r["LastName"].ToString();
@@ -49,8 +50,8 @@ namespace SocialNetwork_Dal.concrete
         }
 
 
+        //Registering new User
 
-        //Verify if login is correct or not!
         public bool RegisterUser(User user)
         {
             List<SqlParameter> sqlParameters = new List<SqlParameter>();

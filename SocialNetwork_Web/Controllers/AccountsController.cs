@@ -46,6 +46,9 @@ namespace SocialNetwork_Web.Controllers
                         TempData["lmessage"] = "Login Successful!";
                         FormsAuthentication.SetAuthCookie(u.Email, false);
 
+                        //set usr in tempdata and pass to the homepage
+                        Session["loggedinUser"] = u;
+
                         return RedirectToAction("Index", "User");
                     }
                     
@@ -105,7 +108,13 @@ namespace SocialNetwork_Web.Controllers
             return View();
         }
 
-
+        //signout
+        public ActionResult Signout()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            return RedirectToAction("Login");
+        }
 
 
         //Error Page

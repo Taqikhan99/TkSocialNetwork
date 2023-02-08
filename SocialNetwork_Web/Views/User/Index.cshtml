@@ -1,6 +1,6 @@
 ﻿
 @{
-    Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -8,18 +8,277 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/Style1.css" rel="stylesheet" />
+    
     <title>Index</title>
 </head>
 <body>
-    <div> 
-        Welcome to Homepage 
+
+    
+
+    <div class=" container p-3 mt-4 row">
+        
+
+        @* left section  *@
+
+        <div class="sectionleft col-md-4">
+            <div class="profilelinkdiv mb-5">
+                <div class="prldiv1 mb-4">
+                    <div class="dpcontainer mb-5">
+                        <img src="~/Content/images/user4.jpg" />
+                    </div>
+
+
+                </div>
+                <div class="p-1 ">
+                    <h4 class="text-center my-3">
+
+                        @if (Session["loggedinUser"] != null)
+                        {
+                            @ViewBag.cuser.FirstName @ViewBag.cuser.LastName
+                        }
+
+
+                    </h4>
+                    <p class="text-center text-secondary my-1"><small>Dot net Developer at Premier group</small></p>
+                    <hr />
+                    <h5 class="text-center text-secondary my-1"> Friends</h5>
+                    <h5 class="text-center my-2"> 26</h5>
+                    <hr />
+                    
+                    <div class="text-center">
+                        @Html.ActionLink("View Profile", "UserProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="suggestionslink mt-4 p-1">
+                <div class="mb-1d-flex">
+                    <h5>Suggestions</h5>
+                    
+                </div>
+                <hr />
+                <div class="d-flex flex-column">
+                    @* one suggested user *@
+                    <div class="suggested p-2 mb-2">
+                        <div class="suggImg">
+                            <img src="~/Content/images/user1.jpg" />
+                        </div>
+
+                        <div class="text">
+                            <p><small>John Peter</small></p>
+                            <p><small>Web developer </small></p>
+                        </div>
+                        <div class="suggbtn">
+                            <button class="btn btn-secondary">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    @* ---------------------- *@
+                    <div class="suggested p-2 mb-2">
+                        <div class="suggImg">
+                            <img src="~/Content/images/user2.jpg" />
+                        </div>
+
+                        <div class="text">
+                            <p><small>John Peter</small></p>
+                            <p><small>Web developer </small></p>
+                        </div>
+                        <div class="suggbtn">
+                            <button class="btn btn-secondary">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    @* ---------------------- *@
+                    <div class="suggested p-2 mb-2">
+                        <div class="suggImg">
+                            <img src="~/Content/images/user3.jpg" />
+                        </div>
+
+                        <div class="text">
+                            <p><small>John Peter</small></p>
+                            <p><small>Web developer </small></p>
+                        </div>
+                        <div class="suggbtn">
+                            <button class="btn btn-secondary">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    @* ---------------------- *@
+                    <div class="text-center">
+                        @Html.ActionLink("View More", "UserProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @* Center section *@
+    <div class="sectioncenter col-md-7">
+
+        <div class="addpostdiv d-flex align-items-center justify-content-between p-3">
+            <div class="dp1 d-flex gap-3 w-75">
+                <img src="~/Content/images/user4.jpg" />
+
+            </div>
+            <button type="button" class="btn btn-sm btn-success p-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Post</button>
+        </div>
+       
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">@User.Identity.Name</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    @* modal body include a form to post *@
+                    <div class="modal-body">
+                        <form id="postform" enctype="multipart/form-data">
+
+                            <input placeholder="What is on your mind?" type="text" class="form-control w-75 mx-auto mb-3" id="posttext" />
+                            <input onchange="readURL(this)" type="file" class="form-control w-75 mx-auto mb-3" id="imginputPost" />
+
+                            <img id="uploadedimg"  class="w-75 mx-auto" style="display:block; height:200px;width:300px;" src="" alt="your image" />
+
+                        </form>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button  id="confirmPost" type="button" class="btn btn-primary" onclick="sendPostData()">Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="PostsLists mt-5">
+
+            @* single post *@
+            <div class="Post ">
+                <div class="PostTop p-3 row">
+                    <div class="dp2  col-2">
+                        <img src="~/Content/images/user4.jpg" />
+                    </div>
+                    <div class="col-8">
+                        <h6>Taqi Ahmed</h6>
+                        <p class="text-secondary ms-1" style="font-size:12px;">5 mins ago</p>
+                    </div>
+                </div>
+                <div class="postbody p-3">
+                    <p>Hello there Sorry But I am sharing this!</p>
+
+                    <img src="~/Content/images/dank-meme-300x300.jpg" />
+
+                </div>
+                <div class="postbottom p-3">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+
+                </div>
+
+
+            </div>
+            @* -------- *@@* single post *@
+            <div class="Post ">
+                <div class="PostTop p-3 row">
+                    <div class="dp2  col-2">
+                        <img src="~/Content/images/user4.jpg" />
+                    </div>
+                    <div class="col-8">
+                        <h6>Taqi Ahmed</h6>
+                        <p class="text-secondary ms-1" style="font-size:12px;">5 mins ago</p>
+                    </div>
+                </div>
+            </div>
+            @* -------- *@@* single post *@
+            <div class="Post ">
+                <div class="PostTop p-3 row">
+                    <div class="dp2  col-2">
+                        <img src="~/Content/images/user4.jpg" />
+                    </div>
+                    <div class="col-8">
+                        <h6>Taqi Ahmed</h6>
+                        <p class="text-secondary ms-1" style="font-size:12px;">5 mins ago</p>
+
+                    </div>
+                </div>
+            </div>
+            @* -------- *@
+        </div>
+
+
+
+
+    </div>
+       
+       
+
     </div>
 </body>
 </html>
 
-
+<script src="~/Scripts/jquery-3.5.0.min.js"></script>
 <script>
+    console.log('@Session["loggedinUser"]')
+
+    function readURL(input) {
+        console.log(input);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log($("#uploadedimg"));
+                console.log(e);
+                //$("#uploadedimg").style.display = "block";
+                $('#uploadedimg')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    //create a post
+    function sendPostData() {
+        alert("clicked")
+        var postText = document.getElementById("posttext").value;
+
+        var postImgPath = document.getElementById("imginputPost").value;
+
+        console.log(postText)
+        console.log(postImgPath)
+
+       
 
 
+
+            $.ajax({
+                type: "POST",
+                url: "/User/CreatePost",
+                data: {
+                    text: postText,
+                    imgPath: postImgPath
+
+                    },
+                success: function (data) {
+                    console.log(data)
+                    alert("New Post Added")
+                }
+            });
+        
+
+
+
+
+
+    }
+        
 
 </script>

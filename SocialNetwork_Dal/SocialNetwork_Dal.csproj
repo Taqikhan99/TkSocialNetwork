@@ -44,8 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IAccountRepository.cs" />
+    <Compile Include="Abstract\IUserRepository.cs" />
     <Compile Include="concrete\AccountRepository.cs" />
     <Compile Include="concrete\DbClass.cs" />
+    <Compile Include="concrete\UserRepository.cs" />
     <Compile Include="Entities\UserLoginCheck.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

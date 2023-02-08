@@ -80,5 +80,25 @@ namespace SocialNetwork_Dal.concrete
 
         }
 
+        public DataTable execQuery(string query)
+        {
+
+            DataTable dt = new DataTable();
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                con.Open();
+                adapter.Fill(dt);
+                con.Close();
+
+
+            }
+
+            return dt;
+
+        }
+
     }
 }
