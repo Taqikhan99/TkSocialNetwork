@@ -9,6 +9,7 @@ namespace SocialNetwork_Dal.Abstract
 {
     public interface IUserRepository
     {
-        User GetUserData(int id);
+        User GetUserData(string email);
+        string CreatePost(Post post, int posterId);
     }
 }

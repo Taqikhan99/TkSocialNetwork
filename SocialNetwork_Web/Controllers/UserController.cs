@@ -1,5 +1,6 @@
 ﻿using SocialNetwork_Dal.Abstract;
 using SocialNetwork_Dal.concrete;
+using SocialNetwork_Dal.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace SocialNetwork_Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            
 
             ViewBag.cuser = Session["loggedinUser"];
 
@@ -31,7 +33,7 @@ namespace SocialNetwork_Web.Controllers
         [Authorize]
         public ActionResult MyProfile()
         {
-
+            
 
             return View();
         }
@@ -39,10 +41,37 @@ namespace SocialNetwork_Web.Controllers
 
 
         //create post
-        public ActionResult CreatePost(string text,string imgPath)
+        [HttpPost]
+        public ActionResult CreatePost(Post post)
         {
+            try
+            {
+                var currentUser = (SocialNetwork_Dal.Entities.User)Session["loggedinUser"];
+                if(currentUser != null)
+                {
+                    string message = userRepo.CreatePost(post, currentUser.Id);
+                }
 
-            return View();
+                
+            }
+            catch(Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage","Account");
+            }
+
+            if (ModelState.IsValid)
+            {
+
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(false,JsonRequestBehavior.AllowGet);
+            }
+
+            
         }
     }
 }

@@ -35,6 +35,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,7 @@
     <Compile Include="concrete\AccountRepository.cs" />
     <Compile Include="concrete\DbClass.cs" />
     <Compile Include="concrete\UserRepository.cs" />
+    <Compile Include="Entities\Post.cs" />
     <Compile Include="Entities\UserLoginCheck.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
