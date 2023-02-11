@@ -33,11 +33,11 @@ namespace SocialNetwork_Dal.concrete
 
                 string filename = HttpContext.Current.User.Identity.Name + "_" + Path.GetFileName(post.PostImage.FileName) + Path.GetExtension(post.PostImage.FileName);
 
-                post.PostImagePath = "~/Content/Images/profilepics/" + filename;
+                post.PostImagePath = "~/Content/PostImages/" + filename;
 
                 if (post.PostImage != null)
                 {
-                    string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/PostImages/"), filename);
+                    string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/PostImages/"), filename);
                     //string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/profilepics/"), HttpContext.Current.User.Identity.Name + "_" + Path.GetFileName((teacher.UserPic.FileName))+ Path.GetExtension(teacher.UserPic.FileName));
                     post.PostImage.SaveAs(path);
                     List<SqlParameter> sqlParameters = new List<SqlParameter>();
@@ -52,7 +52,7 @@ namespace SocialNetwork_Dal.concrete
 
                     if (updated)
                     {
-                        return "Profile Updated Success!";
+                        return "OK";
                     }
 
                 }

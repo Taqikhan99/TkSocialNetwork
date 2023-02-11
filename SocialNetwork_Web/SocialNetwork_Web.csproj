@@ -150,6 +150,8 @@
     <Content Include="Views\Accounts\Signup.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Accounts\ErrorPage.cshtml" />
+    <Content Include="Views\User\PeoplesPage.cshtml" />
+    <Content Include="Views\User\MyProfile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -159,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\PostImages\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -49,7 +49,7 @@
                     <hr />
 
                     <div class="text-center">
-                        @Html.ActionLink("View Profile", "UserProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
+                        @Html.ActionLink("View More", "MyProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
                     </div>
                 </div>
 
@@ -113,7 +113,7 @@
                     </div>
                     @* ---------------------- *@
                     <div class="text-center">
-                        @Html.ActionLink("View More", "UserProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
+                        @Html.ActionLink("View More", "MyProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
 
                         @* modal body include a form to post *@
                         <div class="modal-body">
-                            <form id="postform"  enctype="multipart/form-data">
+                            <form id="postform" method="post" action="CreatePost" enctype="multipart/form-data">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
@@ -152,18 +152,18 @@
                                 <input placeholder="What is on your mind?" type="text" class="form-control w-75 mx-auto mb-3" id="posttext" name="PostText" />
                                 @Html.ValidationMessageFor(model => model.PostText, "", new { @class = "text-danger" })
 
-                                <input onchange="readURL(this)" type="file" class="form-control w-75 mx-auto mb-3" id="imginputPost" />
+                                <input name="PostImage"   type="file" class="form-control w-75 mx-auto mb-3" id="imginputPost" onchange="readURL(this)" />
 
 
                                 <img id="uploadedimg" class="w-75 mx-auto" style="display:block; height:200px;width:300px;" src="" alt="your image" />
-                                <button onclick="clickPost()" id="confirmPost" type="button" class="btn btn-primary" onclick="sendPostData()">Post</button>
+                                <button  id="confirmPost" type="submit" class="btn btn-primary">Post</button>
                             </form>
 
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -235,6 +235,20 @@
 
 <script src="~/Scripts/jquery-3.5.0.min.js"></script>
 <script>
+
+    //login success message
+
+
+    if ('@ViewBag.loginmessage' != null) {
+        swal({
+            title: "Succss",
+            text: "Login Successful!",
+            icon: "success",
+        });
+    }
+
+
+
     console.log('@Session["loggedinUser"]')
 
     function readURL(input) {
@@ -261,17 +275,18 @@
     function clickPost() {
 
         var postText = document.getElementById("posttext").value;
-        var postImage = document.getElementById("imginputPost").value;
+        var postImage = document.getElementById("imginputPost").files[0];
 
-
+        console.log(postImage);
         if (postText == "") {
             callErrorAlert("Must Provide Some Text to Post");
         }
         else {
             var post = {
                 postText,
-                postImage
+                //postImage
             }
+            console.log(post);
             PostSubmit(post)
         }
     }
@@ -282,7 +297,9 @@
         $.ajax({
             type: "POST",
             url: "/User/CreatePost",
-            data: {post},
+            data: { post },
+            processData: false,
+            contentType:false,
             success: function (data) {
                 console.log(data)
             }
@@ -308,7 +325,7 @@
         });
     }
 
-    
+
 
 
 </script>

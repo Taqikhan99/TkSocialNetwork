@@ -121,6 +121,7 @@ namespace SocialNetwork_Web.Controllers
         //Error Page
         public ActionResult ErrorPage()
         {
+            ViewBag.message = TempData["message"];
             return View();
         }
 

@@ -39,6 +39,7 @@ namespace SocialNetwork_Dal.concrete
             {
                 user1 = new User();
                 DataRow r = dt.Rows[0];
+                user1.Id = Convert.ToInt32(r["UserId"]);
                 user1.FirstName = r["FirstName"].ToString();
                 user1.LastName = r["LastName"].ToString();
                 user1.Email = r["Email"].ToString();

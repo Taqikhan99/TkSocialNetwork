@@ -25,6 +25,7 @@ namespace SocialNetwork_Web.Controllers
             
 
             ViewBag.cuser = Session["loggedinUser"];
+            ViewBag.loginmessage = TempData["lmessage"];
 
             return View();
         }
@@ -39,8 +40,8 @@ namespace SocialNetwork_Web.Controllers
         }
 
 
-
         //create post
+        [Authorize]
         [HttpPost]
         public ActionResult CreatePost(Post post)
         {
@@ -50,9 +51,19 @@ namespace SocialNetwork_Web.Controllers
                 if(currentUser != null)
                 {
                     string message = userRepo.CreatePost(post, currentUser.Id);
-                }
 
-                
+                    //check if post created
+                    if (message == "OK") {
+                    
+                        ViewBag.message = "Post Created Successfully";
+                        return RedirectToAction("Index");
+                    }
+
+                }
+                TempData["message"] = "Post Not Created";
+                return RedirectToAction("ErrorPage", "Account");
+
+
             }
             catch(Exception ex)
             {
@@ -60,18 +71,18 @@ namespace SocialNetwork_Web.Controllers
                 return RedirectToAction("ErrorPage","Account");
             }
 
-            if (ModelState.IsValid)
-            {
-
-
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(false,JsonRequestBehavior.AllowGet);
-            }
 
             
         }
+
+
+        //list people page
+        public ActionResult PeoplesPage()
+        {
+            return View();
+
+        }
+
+
     }
 }
