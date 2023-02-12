@@ -22,6 +22,8 @@ namespace SocialNetwork_Dal.concrete
             throw new NotImplementedException();
         }
 
+
+        //method to create a post
         public string CreatePost(Post post, int posterId)
         {
             string extension = Path.GetExtension(post.PostImage.FileName);
@@ -60,6 +62,37 @@ namespace SocialNetwork_Dal.concrete
 
             }
                 throw new NotImplementedException();
-        } 
+        }
+
+        public User GetProfileData(int id)
+        {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@userid", id));
+
+            User user = new User();
+            DataTable dt = db.execGetProc("spGetUserProfile", sqlParameters);
+
+            //u.UserId, u.Username,u.Email,u.CreatedAt,up.DateOfBirth,up.ProfilePic,up.Gender,up.city
+
+            if (dt.Rows.Count>0) {
+            
+                DataRow r = dt.Rows[0];
+                user.Id = Convert.ToInt32(r["UserId"]);
+                
+                user.UserName = r["UserName"].ToString();
+                user.Email = r["Email"].ToString();
+                user.CreatedAt =  Convert.ToDateTime(r["CreatedAt"]);
+                user.Dob =  Convert.ToDateTime(r["DateOfBirth"]);
+                user.ProfilePicPath = r["ProfilePic"].ToString();
+                user.Gender = r["Gender"].ToString();
+                user.City = r["City"].ToString() ;
+                user.Password = r["Password"].ToString();
+                user.Phone = r["Phone"].ToString();
+
+
+            }
+            return user;
+
+        }
     }
 }

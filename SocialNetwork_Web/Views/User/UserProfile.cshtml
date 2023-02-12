@@ -1,0 +1,213 @@
+﻿@model SocialNetwork_Dal.Entities.User
+@{
+    ViewBag.Title = "MyProfile";
+}
+
+
+<style>
+    .profiletopSec{
+        height:500px;
+        width:100%;
+        border:1px solid gray;
+    }
+    .profileImg {
+        height: 250px;
+        width: 250px;
+        
+       
+
+    }
+        .profileImg > img {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+        }
+
+    .image-upload{
+       
+    }
+    .image-upload > input {
+        display: none;
+    }
+        
+        .image-upload img {
+            width: 40px;
+            cursor: pointer;
+            margin-top:2rem;
+           
+        }
+
+</style>
+
+@*<div class="image-upload">
+
+    <label for="file-input">
+        <img src="~/Content/images/upload.png" />
+    </label>
+
+    <input id="file-input" name="file" type="file" onchange="readURL(this)" />
+</div>*@
+
+
+
+<div class="container mt-5 p-3">
+
+    <section class="row profiletopSec p-4">
+
+        <div class="profileImg mx-auto d-flex">
+
+            @*<img src="@Url.Content()" />*@
+            @if (Model.ProfilePicPath != "")
+            {
+            <img id="" src="~/Content/images/user3.jpg" />
+
+            }
+            else
+            {
+            <img src="~/Content/images/user.png" />
+            }
+        </div>
+        <div class="ProfileInfo">
+
+            <div class="row mb-5">
+                <div class="col">
+                    User Name: @Model.UserName
+                </div>
+                <div class="col">Email: @Model.Email</div>
+                <div class="col">Phone: @Model.Phone</div>
+
+
+            </div>
+
+            <div class="row mb-5">
+                <div class="col">Date of Birth: @Model.Dob.ToString("dd/MM/yyyy")</div>
+                <div class="col">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</div>
+                <div class="col">Lives in: @Model.City</div>
+
+
+            </div>
+            <div class="row mt-5">
+                <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn w-50 btn-primary mx-auto">Edit Profile</button>
+
+            </div>
+
+        </div>
+
+        @*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Launch demo modal
+        </button>*@
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editprofile" method="POST">
+
+                            <div class="mb-3">
+                                <label for="emailadd" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailadd" name="Email" aria-describedby="emailHelp" value="@Model.Email">
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="text" class="form-control" id="password" name="Password" value="@Model.Password">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="UserName" value="@Model.UserName">
+                            </div>
+                            
+                            <div class="image-upload text-center mb-3  ">
+                                @*<img class="ms-auto"  style="height:150px;width:220px" id="uploadedimg" src="~/Content/images/user3.jpg" />*@
+                                @if (Model.ProfilePicPath != "")
+                                {
+                                    <img class="ms-auto"  style="height:150px;width:220px" id="uploadedimg"  src="~/Content/images/user3.jpg" />
+
+                                }
+                                else
+                                {
+                                    <img class="ms-auto"  style="height:150px;width:220px" id="uploadedimg" src="~/Content/images/user.png" />
+                                }
+                                <label for="file-input">
+                                    <img style="margin-top:140px;" src="~/Content/images/upload.png" />
+                                </label>
+
+                                <input id="file-input" name="file" type="file" onchange="readURL(this)" />
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+
+
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+    <section class="showmyPosts">
+
+
+
+    </section>
+
+
+</div>
+
+<script src="~/Scripts/jquery-3.5.0.min.js"></script>
+
+<script>
+
+    function readURL(input) {
+        console.log(input);
+        
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                //console.log($("#uploadedimg"));
+                //console.log(e);
+                //$("#uploadedimg").style.display = "block";
+                $('#uploadedimg')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+
+
+            var formData = new FormData();
+            formData.append("HttpPostedFileBase", input.files[0]);
+            console.log("form:",formData);
+            console.log("file",input.files[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "/User/UploadDp",
+                cache: false,
+                enctype: "multipart/form-data",
+                data: { file: input.files[0] },
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data)
+                }
+            });
+
+
+        }
+    }
+
+</script>
+
+
+

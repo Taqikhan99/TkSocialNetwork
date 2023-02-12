@@ -11,5 +11,7 @@ namespace SocialNetwork_Dal.Abstract
     {
         User GetUserData(string email);
         string CreatePost(Post post, int posterId);
+
+        User GetProfileData(int id);
     }
 }

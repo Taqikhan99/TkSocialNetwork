@@ -42,6 +42,7 @@ namespace SocialNetwork_Dal.concrete
                 user1.Id = Convert.ToInt32(r["UserId"]);
                 user1.FirstName = r["FirstName"].ToString();
                 user1.LastName = r["LastName"].ToString();
+                user1.UserName = r["UserName"].ToString();
                 user1.Email = r["Email"].ToString();
                 user1.Phone = r["Phone"].ToString();
                
@@ -58,6 +59,7 @@ namespace SocialNetwork_Dal.concrete
             List<SqlParameter> sqlParameters = new List<SqlParameter>();
             sqlParameters.Add(new SqlParameter("@FirstName", user.FirstName));
             sqlParameters.Add(new SqlParameter("@LastName", user.LastName));
+            sqlParameters.Add(new SqlParameter("@Username", user.UserName));
             sqlParameters.Add(new SqlParameter("@Email", user.Email));
             sqlParameters.Add(new SqlParameter("@Phone", user.Phone));
             sqlParameters.Add(new SqlParameter("@Password", user.Password));

@@ -37,7 +37,7 @@
 
                         @if (Session["loggedinUser"] != null)
                         {
-                            @ViewBag.cuser.FirstName @ViewBag.cuser.LastName
+                            @ViewBag.cuser.UserName
                         }
 
 
@@ -49,7 +49,8 @@
                     <hr />
 
                     <div class="text-center">
-                        @Html.ActionLink("View More", "MyProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
+                        @*@Html.ActionLink("View More", "MyProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })*@
+                        @Html.ActionLink("ProfilePage", "UserProfile", "User", new { id = currentUser.Id }, new { @class = "text-danger ", @style = "text-decoration:none;" })
                     </div>
                 </div>
 
@@ -113,7 +114,7 @@
                     </div>
                     @* ---------------------- *@
                     <div class="text-center">
-                        @Html.ActionLink("View More", "MyProfile", "User", new { @class = "text-danger ", @style = "text-decoration:none;" })
+                        @Html.ActionLink("ProfilePage", "UserProfile", "User", new { id = currentUser.Id}, new { @class = "text-danger ", @style = "text-decoration:none;" })
                     </div>
                 </div>
             </div>
@@ -137,7 +138,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">@currentUser.FirstName @currentUser.LastName</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">@currentUser.UserName</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -238,8 +239,8 @@
 
     //login success message
 
-
-    if ('@ViewBag.loginmessage' != null) {
+    console.log('Tempdaata:', '@TempData["loginmessage"] ');
+    if ('@TempData["loginmessage"]' != "") {
         swal({
             title: "Succss",
             text: "Login Successful!",
@@ -265,7 +266,14 @@
             };
 
             reader.readAsDataURL(input.files[0]);
+
+
+
         }
+
+
+
+
     }
 
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace SocialNetwork_Web.Controllers
@@ -25,18 +26,50 @@ namespace SocialNetwork_Web.Controllers
             
 
             ViewBag.cuser = Session["loggedinUser"];
-            ViewBag.loginmessage = TempData["lmessage"];
+            TempData["loginmessage"] = TempData["lmessage"];
 
             return View();
         }
 
         //View UserProfile
         [Authorize]
-        public ActionResult MyProfile()
+        public ActionResult UserProfile(int Id)
         {
-            
+            try
+            {
+                User user=userRepo.GetProfileData(Id);
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Account");
+            }
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult UserProfile(User user)
+        {
+            return View();
+        }
+
+        //upload profile pic
+        [HttpPost]
+        public ActionResult UpdateProfile(HttpPostedFileBase file)
+        {
+            try
+            {
+
+
+                return Json("Ok", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Account");
+            }
         }
 
 
