@@ -148,3 +148,21 @@
     
 }
 /*----------------------*/
+
+/*Peoples list Page*/
+.peoplecard {
+    height: 300px;
+    background: #FFEFBA; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, white, #ffd1aa); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, white, #ffd1aa); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-around;
+}
+
+
+/**/

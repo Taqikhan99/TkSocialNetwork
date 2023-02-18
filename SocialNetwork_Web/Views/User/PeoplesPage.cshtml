@@ -1,17 +1,39 @@
-﻿
+﻿@model List<SocialNetwork_Dal.Entities.User>
 @{
-    Layout = null;
+    ViewBag.Title = "PeoplesPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>PeoplesPage</title>
-</head>
-<body>
-    <div> 
+<div class="container p-3">
+
+
+    <div class="row p-1 mb-3 bg-light">
+        <h3>Make People Friends</h3>
     </div>
-</body>
-</html>
+
+    <div class="row ">
+
+        @* for each person in peoples table make a card to shoe them *@
+        @{ 
+            foreach(var p in Model)
+            {
+                <div class="peoplecard col-sm-5 p-2 col-md-4 col-lg-3  ms-2 mb-3">
+
+                    <h5>@p.UserName</h5>
+                    <img style="width:50%;border-radius:50%" src="~/Content/images/user2.jpg" />
+                    <div class="btnsec">
+                        <a href=""  class="btn btn-success">Add Friend</a>
+                        <a href="" class="btn btn-primary">View Profile</a>
+                    </div>
+                    
+
+                </div>
+            }
+        }
+
+
+    </div>
+
+</div>
+

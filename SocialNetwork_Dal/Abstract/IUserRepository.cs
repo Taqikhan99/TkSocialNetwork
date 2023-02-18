@@ -13,5 +13,11 @@ namespace SocialNetwork_Dal.Abstract
         string CreatePost(Post post, int posterId);
 
         User GetProfileData(int id);
+        bool UpdateProfile(User user);
+
+        List<User> GetOtherUsers(int id);
+
+        
     }
+
 }

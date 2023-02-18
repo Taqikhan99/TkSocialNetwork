@@ -6,14 +6,15 @@
 
 <style>
     .profiletopSec{
-        height:500px;
+        height:auto;
+        min-height:400px;
         width:100%;
         border:1px solid gray;
     }
     .profileImg {
         height: 250px;
         width: 250px;
-        
+        cursor:pointer;
        
 
     }
@@ -54,44 +55,53 @@
 
     <section class="row profiletopSec p-4">
 
-        <div class="profileImg mx-auto d-flex">
+        <div class="row">
+            <div class="profileImg col-md-4 mx-auto d-flex align-items-center">
 
-            @*<img src="@Url.Content()" />*@
-            @if (Model.ProfilePicPath != "")
-            {
-            <img id="" src="~/Content/images/user3.jpg" />
+                @*<img src="@Url.Content()" />*@
+                @if (Model.ProfilePicPath != "")
+                {
+                    <img id="" src="~/Content/images/user3.jpg" />
 
-            }
-            else
-            {
-            <img src="~/Content/images/user.png" />
-            }
-        </div>
-        <div class="ProfileInfo">
+                }
+                else
+                {   
+                    <img src="~/Content/images/user.png" />
+                }
+            </div>
+            <div class="ProfileInfo col-md-8">
 
-            <div class="row mb-5">
-                <div class="col">
-                    User Name: @Model.UserName
+                <div class="row mb-5">
+
+                    <div class="col-md-8  ps-5">
+                        <h3 class="mb-3">User Name: @Model.UserName</h3>
+                        <h3 class="mb-3">Email: @Model.Email</h3>
+                        <h3 class="mb-3">Phone: @Model.Phone</h3>
+                        <h3 class="mb-3">Date of Birth: @Model.Dob.ToString("dd/MM/yyyy")</h3>
+                        <h3 class="mb-3">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</h3>
+                        <h3 class="mb-3">Lives in: @Model.City  </h3>
+                        <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn w-50 btn-primary mx-auto">Edit Profile</button>
+                    </div>
+                    
+
+
                 </div>
-                <div class="col">Email: @Model.Email</div>
-                <div class="col">Phone: @Model.Phone</div>
+
+                <div class="row mb-5">
 
 
-            </div>
 
-            <div class="row mb-5">
-                <div class="col">Date of Birth: @Model.Dob.ToString("dd/MM/yyyy")</div>
-                <div class="col">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</div>
-                <div class="col">Lives in: @Model.City</div>
+                </div>
+                <div class="row mt-5">
+                    
 
-
-            </div>
-            <div class="row mt-5">
-                <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn w-50 btn-primary mx-auto">Edit Profile</button>
+                </div>
 
             </div>
 
         </div>
+       
+        
 
         @*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Launch demo modal
@@ -106,8 +116,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editprofile" method="POST">
-
+                        <form id="editprofile" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="dob" name="Dob" value="@Model.Dob">
+                            <input type="hidden" id="createdat" name="CreatedAt" value="@Model.CreatedAt">
+                            <input type="hidden" id="fname" name="FirstName" value="@Model.FirstName">
+                            <input type="hidden" id="lname" name="LastName" value="@Model.LastName">
                             <div class="mb-3">
                                 <label for="emailadd" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="emailadd" name="Email" aria-describedby="emailHelp" value="@Model.Email">
@@ -122,32 +135,43 @@
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="UserName" value="@Model.UserName">
                             </div>
-                            
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="City" value="@Model.City">
+                            </div>
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select name="Gender" id="gender" class="form-control" >
+                                    <option selected value="Male">Male</option>
+                                    <option selected value="Female">Female</option>
+                                </select>
+                            </div>
+
                             <div class="image-upload text-center mb-3  ">
                                 @*<img class="ms-auto"  style="height:150px;width:220px" id="uploadedimg" src="~/Content/images/user3.jpg" />*@
                                 @if (Model.ProfilePicPath != "")
                                 {
-                                    <img class="ms-auto"  style="height:150px;width:220px" id="uploadedimg"  src="~/Content/images/user3.jpg" />
+                                    <img class="ms-auto" style="height:150px;width:220px" id="uploadedimg" src="~/Content/images/user3.jpg" />
 
                                 }
                                 else
                                 {
-                                    <img class="ms-auto"  style="height:150px;width:220px" id="uploadedimg" src="~/Content/images/user.png" />
+                                    <img class="ms-auto" style="height:150px;width:220px" id="uploadedimg" src="~/Content/images/user.png" />
                                 }
                                 <label for="file-input">
                                     <img style="margin-top:140px;" src="~/Content/images/upload.png" />
                                 </label>
 
-                                <input id="file-input" name="file" type="file" onchange="readURL(this)" />
+                                <input id="file-input" name="ProfilePic" type="file" onchange="readURL(this)" />
                             </div>
 
 
-                            <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                            <button onclick="validate()" type="submit" class="btn btn-primary w-100">Update Profile</button>
 
 
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -167,7 +191,7 @@
 <script src="~/Scripts/jquery-3.5.0.min.js"></script>
 
 <script>
-
+    console.log("profile pic:"+'@Model.ProfilePicPath');
     function readURL(input) {
         console.log(input);
         
@@ -185,27 +209,36 @@
             reader.readAsDataURL(input.files[0]);
 
 
-            var formData = new FormData();
-            formData.append("HttpPostedFileBase", input.files[0]);
-            console.log("form:",formData);
-            console.log("file",input.files[0]);
+            //var formData = new FormData();
+            //formData.append("HttpPostedFileBase", input.files[0]);
+            //console.log("form:",formData);
+            //console.log("file",input.files[0]);
 
-            $.ajax({
-                type: "POST",
-                url: "/User/UploadDp",
-                cache: false,
-                enctype: "multipart/form-data",
-                data: { file: input.files[0] },
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    console.log(data)
-                }
-            });
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/User/UploadDp",
+            //    cache: false,
+            //    enctype: "multipart/form-data",
+            //    data: { file: input.files[0] },
+            //    processData: false,
+            //    contentType: false,
+            //    success: function (data) {
+            //        console.log(data)
+            //    }
+            //});
 
 
         }
     }
+
+    function validate(){
+        let email = document.getElementById("emailadd").value;
+        let password = document.getElementById("password").value;
+        let userName = document.getElementById("username").value;
+        let file = document.getElementById("file-input").value;
+        console.log(email,file)
+    }
+
 
 </script>
 

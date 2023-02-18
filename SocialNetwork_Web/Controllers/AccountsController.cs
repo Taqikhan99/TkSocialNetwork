@@ -65,8 +65,36 @@ namespace SocialNetwork_Web.Controllers
 
             
         }
+        //get countries options
+        public string GetCountryOptions()
+        {
+            try
+            {
 
+                string countries = _accountRepo.Countryoptions();
+                return countries;
 
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.Message;
+            }
+        }
+        //get cities options
+        public string GetCityOptions( int id)
+        {
+            try
+            {
+
+                string cities = _accountRepo.CityOptions(id);
+                return cities;
+
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.Message;
+            }
+        }
         //signup method
         public ActionResult Signup()
         {

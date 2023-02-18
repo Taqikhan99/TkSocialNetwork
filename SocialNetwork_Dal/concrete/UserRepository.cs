@@ -1,4 +1,5 @@
-﻿using SocialNetwork_Dal.Abstract;
+﻿using Newtonsoft.Json;
+using SocialNetwork_Dal.Abstract;
 using SocialNetwork_Dal.Entities;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace SocialNetwork_Dal.concrete
             throw new NotImplementedException();
         }
 
+
+        #region Creating New Post Method
 
         //method to create a post
         public string CreatePost(Post post, int posterId)
@@ -63,7 +66,10 @@ namespace SocialNetwork_Dal.concrete
             }
                 throw new NotImplementedException();
         }
+        #endregion
 
+
+        #region Visiting UserProfile
         public User GetProfileData(int id)
         {
             List<SqlParameter> sqlParameters = new List<SqlParameter>();
@@ -82,10 +88,11 @@ namespace SocialNetwork_Dal.concrete
                 user.UserName = r["UserName"].ToString();
                 user.Email = r["Email"].ToString();
                 user.CreatedAt =  Convert.ToDateTime(r["CreatedAt"]);
-                user.Dob =  Convert.ToDateTime(r["DateOfBirth"]);
+                user.Dob = Convert.ToDateTime( r["DateOfBirth"]);
                 user.ProfilePicPath = r["ProfilePic"].ToString();
                 user.Gender = r["Gender"].ToString();
                 user.City = r["City"].ToString() ;
+                user.Country = r["Country"].ToString() ;
                 user.Password = r["Password"].ToString();
                 user.Phone = r["Phone"].ToString();
 
@@ -94,5 +101,88 @@ namespace SocialNetwork_Dal.concrete
             return user;
 
         }
+        #endregion
+
+
+        #region Updating Profile
+        public bool UpdateProfile(User user)
+        {
+
+            // first save the imag path
+            string extension = Path.GetExtension(user.ProfilePic.FileName);
+
+            //check if extension is jpg, jpeg or png
+            if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
+            {
+
+
+                string filename = user.UserName + "_" + Path.GetFileName(user.ProfilePic.FileName) + Path.GetExtension(user.ProfilePic.FileName);
+
+                user.ProfilePicPath = "~/Content/ProfileImages/" + filename;
+
+                if (user.ProfilePic != null)
+                {
+                    string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/ProfileImages/"), filename);
+                    //string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/profilepics/"), HttpContext.Current.User.Identity.Name + "_" + Path.GetFileName((teacher.UserPic.FileName))+ Path.GetExtension(teacher.UserPic.FileName));
+                    user.ProfilePic.SaveAs(path);
+                    List<SqlParameter> sqlParameters = new List<SqlParameter>();
+                }
+            }
+
+
+            bool updated = false;
+            if (user != null)
+            {
+                List<SqlParameter> sqlParameters = new List<SqlParameter>();
+                sqlParameters.Add(new SqlParameter("@userid", user.Id));
+                sqlParameters.Add(new SqlParameter("@username", user.UserName));
+                sqlParameters.Add(new SqlParameter("@password", user.Password));
+                sqlParameters.Add(new SqlParameter("@email", user.Email));
+                sqlParameters.Add(new SqlParameter("@profilepicpath", user.ProfilePicPath));
+                sqlParameters.Add(new SqlParameter("@city", user.City));
+                sqlParameters.Add(new SqlParameter("@gender", user.Gender));
+                //sqlParameters.Add(new SqlParameter("@Username", s.Username));
+                //sqlParameters.Add(new SqlParameter("@DepartId", s.DepartId));
+                //sqlParameters.Add(new SqlParameter("@Password", s.Password));
+
+                updated = db.execInsertProc("spUpdateProfile", sqlParameters);
+
+
+
+            }
+            return updated;
+        }
+
+        #endregion
+
+
+
+        #region Display All Users on Peoples Page
+
+        public List<User> GetOtherUsers(int id)
+        {
+            List<User> users = new List<User>();
+            string query = $"Select * from UsersTb where UserId != {id}";
+
+            DataTable dt = db.execQuery(query);
+            if(dt.Rows.Count > 0)
+            {
+                foreach(DataRow dr in dt.Rows)
+                {
+                    User user = new User();
+                    user.Id = Convert.ToInt32(dr["UserId"]);
+                    user.UserName= dr["UserName"].ToString();
+                    user.Email = dr["email"].ToString();
+
+                    users.Add(user);
+                }
+            }
+
+            return users;
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
     }
 }

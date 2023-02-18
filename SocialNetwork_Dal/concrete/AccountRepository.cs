@@ -1,4 +1,5 @@
-﻿using SocialNetwork_Dal.Abstract;
+﻿using Newtonsoft.Json;
+using SocialNetwork_Dal.Abstract;
 using SocialNetwork_Dal.Entities;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,7 @@ namespace SocialNetwork_Dal.concrete
                 user1 = new User();
                 DataRow r = dt.Rows[0];
                 user1.Id = Convert.ToInt32(r["UserId"]);
-                user1.FirstName = r["FirstName"].ToString();
-                user1.LastName = r["LastName"].ToString();
+                
                 user1.UserName = r["UserName"].ToString();
                 user1.Email = r["Email"].ToString();
                 user1.Phone = r["Phone"].ToString();
@@ -57,12 +57,12 @@ namespace SocialNetwork_Dal.concrete
         public bool RegisterUser(User user)
         {
             List<SqlParameter> sqlParameters = new List<SqlParameter>();
-            sqlParameters.Add(new SqlParameter("@FirstName", user.FirstName));
-            sqlParameters.Add(new SqlParameter("@LastName", user.LastName));
+            
             sqlParameters.Add(new SqlParameter("@Username", user.UserName));
             sqlParameters.Add(new SqlParameter("@Email", user.Email));
             sqlParameters.Add(new SqlParameter("@Phone", user.Phone));
             sqlParameters.Add(new SqlParameter("@Password", user.Password));
+            
 
             bool added = db.execInsertProc("spRegisterUser", sqlParameters);
             return added;
@@ -85,5 +85,44 @@ namespace SocialNetwork_Dal.concrete
 
         }
 
+        //get country options
+       
+
+        public string Countryoptions()
+        {
+            string query = $"select CountryId,Countryname from CountryTb";
+            string jsnDatatable = "";
+
+            DataTable dt = db.execQuery(query);
+            if (dt.Rows.Count > 0)
+            {
+                jsnDatatable = JsonConvert.SerializeObject(dt);
+                return jsnDatatable;
+
+            }
+            else
+            {
+                return null;
+            }
+            throw new NotImplementedException();
+        }
+
+        public string CityOptions(int id)
+        {
+            string query = $"select CityId,CityName from CityTb where CountryId={id}";
+            string jsnDatatable = "";
+
+            DataTable dt = db.execQuery(query);
+            if (dt.Rows.Count > 0)
+            {
+                jsnDatatable = JsonConvert.SerializeObject(dt);
+                return jsnDatatable;
+
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

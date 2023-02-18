@@ -33,8 +33,13 @@ namespace SocialNetwork_Dal.Entities
 
         public DateTime Dob { get; set; }
         public HttpPostedFileBase ProfilePic { get; set; }
-        public string ProfilePicPath { get; set; }
+        public  string  ProfilePicPath { get; set; }
+
+        public int cityid { get; set; }
+        public int countryid { get; set; }
         public string City { get; set; }
+
+        public string Country { get; set; }
         public string Gender { get; set; }
 
     }

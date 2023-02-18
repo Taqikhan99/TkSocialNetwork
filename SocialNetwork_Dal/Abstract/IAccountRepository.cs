@@ -13,5 +13,7 @@ namespace SocialNetwork_Dal.Abstract
 
         User LoginUser(UserLoginCheck user);
         bool EmailExists(string Email);
+        string Countryoptions();
+        string CityOptions(int id);
     }
 }

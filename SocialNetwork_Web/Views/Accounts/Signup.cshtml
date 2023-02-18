@@ -24,7 +24,7 @@
             <h1>TkSocial</h1>
            
         </div>
-        <div class="formSec p-3 pt-5">
+        <div class="formSec1 p-3 pt-5">
             <form action="" method="post">
                 <div class="mb-4">
 
@@ -32,21 +32,21 @@
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
 
                 </div>
+                @*<div class="mb-4">
+
+            <input type="text" class="form-control" id="firstname" name="FirstName" placeholder="Enter First Name">
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="mb-4">
+
+            <input type="text" class="form-control" id="lastname" name="LastName" placeholder="Enter Last Name">
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+        </div>*@
                 <div class="mb-4">
 
-                    <input type="text" class="form-control" id="firstname" name="FirstName" placeholder="Enter First Name">
-                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="mb-4">
-
-                    <input type="text" class="form-control" id="lastname" name="LastName" placeholder="Enter Last Name">
-                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="mb-4">
-
-                    <input type="text" class="form-control" id="username" name="UserName" placeholder="Enter Last Name">
+                    <input type="text" class="form-control" id="username" name="UserName" placeholder="Enter User Name">
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
 
                 </div>
@@ -55,6 +55,25 @@
                     <input type="text" class="form-control" id="phone" name="Phone" placeholder="Enter PhoneNumber">
                     @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
                 </div>
+                <div class="mb-4">
+
+                    <input type="date" class="form-control" id="date" name="Dob" placeholder="Select date">
+                    @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
+                </div>
+                @* Select country *@
+                <!--<div class="mb-4">
+
+                    <select onchange="GetCountryvalue()" id="country" name="Country" class="form-control">
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                </div>-->
+                @* Select city *@
+                <!--<div class="mb-4">
+
+                    <select id="city" name="City" class="form-control">
+                    </select>
+                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                </div>-->
 
                 <div class="mb-4">
 
@@ -78,17 +97,66 @@
 </body>
 </html>
 
-
+<script src="~/Scripts/jquery-3.5.0.js"></script>
 <script>
 
-    if ('@TempData["message"]' != '') {
-        swal({
-            title: "Oh oo",
-            text: '@TempData["message"]',
-            icon: "error",
-            button: "OK!",
-        });
+    
+
+     $.ajax({
+            type: "GET",
+             url: "/Accounts/GetCountryOptions",
+            data: "{}",
+            success: function (data) {
+                console.log(data)
+                if (data != null) {
+                    var jsondata = JSON.parse(data);
+                    console.log(jsondata)
+                    var s = '<option disabled selected>Please Select a country</option>';
+                    for (var i = 0; i < jsondata.length; i++) {
+                        console.log('row: ', jsondata[i].Countryname)
+                        s += '<option value="' + jsondata[i].CountryId + '">' + jsondata[i].Countryname + '</option>';
+                    }
+                }
+
+                
+                $("#country").html(s);
+            }
+     });
+
+
+    //function to get the value of countt
+    function GetCountryvalue() {
+        var country = document.getElementById("country").value;
+
+        populateCities(country)
     }
+
+    //function to populate cities
+    function populateCities(countryid) {
+
+        $.ajax({
+            type: "GET",
+            url: "/Accounts/GetCityOptions",
+            data: { id: parseInt(countryid) },
+            success: function (data) {
+                console.log(data)
+                if (data != null) {
+                    var jsondata = JSON.parse(data);
+                    console.log(data)
+                    var s = '<option selected disabled >Please Select a city</option>';
+                    for (var i = 0; i < jsondata.length; i++) {
+                        console.log('row: ', jsondata[i].Cityname)
+                        s += '<option value="' + jsondata[i].CityId + '">' + jsondata[i].CityName + '</option>';
+                    }
+                }
+
+
+                $("#city").html(s);
+            }
+        });
+
+    }
+
 
 
 </script>

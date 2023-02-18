@@ -1,9 +1,12 @@
-﻿using SocialNetwork_Dal.Abstract;
+﻿using Newtonsoft.Json;
+using SocialNetwork_Dal.Abstract;
 using SocialNetwork_Dal.concrete;
 using SocialNetwork_Dal.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -27,6 +30,8 @@ namespace SocialNetwork_Web.Controllers
 
             ViewBag.cuser = Session["loggedinUser"];
             TempData["loginmessage"] = TempData["lmessage"];
+            ViewBag.updProf = TempData["updProfMess"];
+            ViewBag.postcreated = TempData["postmessage"];
 
             return View();
         }
@@ -43,16 +48,32 @@ namespace SocialNetwork_Web.Controllers
             catch (Exception ex)
             {
                 TempData["message"] = ex.Message;
-                return RedirectToAction("ErrorPage", "Account");
+                return RedirectToAction("ErrorPage", "Accounts");
             }
 
-            return View();
+            
         }
 
         [HttpPost]
         public ActionResult UserProfile(User user)
         {
-            return View();
+
+            try
+            {
+                bool updated = userRepo.UpdateProfile(user);
+                if (updated)
+                {
+                    TempData["updProfMess"] = "Profile Updated Success";
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Accounts");
+            }
+
+            return Json("Ok",JsonRequestBehavior.AllowGet);
         }
 
         //upload profile pic
@@ -68,7 +89,7 @@ namespace SocialNetwork_Web.Controllers
             catch(Exception ex)
             {
                 TempData["message"] = ex.Message;
-                return RedirectToAction("ErrorPage", "Account");
+                return RedirectToAction("ErrorPage", "Accounts");
             }
         }
 
@@ -87,8 +108,8 @@ namespace SocialNetwork_Web.Controllers
 
                     //check if post created
                     if (message == "OK") {
-                    
-                        ViewBag.message = "Post Created Successfully";
+
+                        TempData["postmessage"] = "Post Created Successfully";
                         return RedirectToAction("Index");
                     }
 
@@ -109,10 +130,28 @@ namespace SocialNetwork_Web.Controllers
         }
 
 
+        //Get country options
+        
+
+
+
         //list people page
         public ActionResult PeoplesPage()
         {
-            return View();
+            try
+            {
+                var cuser = Session["loggedinUser"] as User;
+                //will pass the current user id to make get reamining users from user table
+                List<User> users = userRepo.GetOtherUsers(cuser.Id);
+
+                 return View(users);
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Account");
+            }
+            
 
         }
 
