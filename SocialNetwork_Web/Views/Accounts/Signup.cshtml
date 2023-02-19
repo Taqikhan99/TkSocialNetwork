@@ -124,38 +124,7 @@
      });
 
 
-    //function to get the value of countt
-    function GetCountryvalue() {
-        var country = document.getElementById("country").value;
-
-        populateCities(country)
-    }
-
-    //function to populate cities
-    function populateCities(countryid) {
-
-        $.ajax({
-            type: "GET",
-            url: "/Accounts/GetCityOptions",
-            data: { id: parseInt(countryid) },
-            success: function (data) {
-                console.log(data)
-                if (data != null) {
-                    var jsondata = JSON.parse(data);
-                    console.log(data)
-                    var s = '<option selected disabled >Please Select a city</option>';
-                    for (var i = 0; i < jsondata.length; i++) {
-                        console.log('row: ', jsondata[i].Cityname)
-                        s += '<option value="' + jsondata[i].CityId + '">' + jsondata[i].CityName + '</option>';
-                    }
-                }
-
-
-                $("#city").html(s);
-            }
-        });
-
-    }
+    
 
 
 

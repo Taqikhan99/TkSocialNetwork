@@ -31,7 +31,7 @@ namespace SocialNetwork_Dal.Entities
 
         public DateTime CreatedAt { get; set; }
 
-        public DateTime Dob { get; set; }
+        public string Dob { get; set; }
         public HttpPostedFileBase ProfilePic { get; set; }
         public  string  ProfilePicPath { get; set; }
 

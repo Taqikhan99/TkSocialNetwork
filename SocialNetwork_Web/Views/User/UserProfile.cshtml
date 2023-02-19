@@ -59,9 +59,9 @@
             <div class="profileImg col-md-4 mx-auto d-flex align-items-center">
 
                 @*<img src="@Url.Content()" />*@
-                @if (Model.ProfilePicPath != "")
+                @if (Model.ProfilePicPath != "" && Model.ProfilePicPath != null)
                 {
-                    <img id="" src="~/Content/images/user3.jpg" />
+                    <img id="" src="@Url.Content(Model.ProfilePicPath)" alt="@Model.ProfilePicPath" />
 
                 }
                 else
@@ -71,21 +71,21 @@
             </div>
             <div class="ProfileInfo col-md-8">
 
-                <div class="row mb-5">
+                
 
                     <div class="col-md-8  ps-5">
-                        <h3 class="mb-3">User Name: @Model.UserName</h3>
-                        <h3 class="mb-3">Email: @Model.Email</h3>
-                        <h3 class="mb-3">Phone: @Model.Phone</h3>
-                        <h3 class="mb-3">Date of Birth: @Model.Dob.ToString("dd/MM/yyyy")</h3>
-                        <h3 class="mb-3">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</h3>
-                        <h3 class="mb-3">Lives in: @Model.City  </h3>
+                        <h4 class="mb-4">User Name: @Model.UserName</h4>
+                        <h4 class="mb-4">Email: @Model.Email</h4>
+                        <h4 class="mb-4">Phone: @Model.Phone</h4>
+                        <h4 class="mb-4">Date of Birth: @Model.Dob</h4>
+                        <h4 class="mb-4">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</h4>
+                        <h4 class="mb-4">Lives in: @Model.City , @Model.Country </h4>
                         <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn w-50 btn-primary mx-auto">Edit Profile</button>
                     </div>
                     
 
 
-                </div>
+                
 
                 <div class="row mb-5">
 
@@ -128,22 +128,34 @@
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="text" class="form-control" id="password" name="Password" value="@Model.Password">
+                                <input type="password" class="form-control" id="password" name="Password" value="@Model.Password">
                             </div>
 
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="UserName" value="@Model.UserName">
                             </div>
-                            <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" name="City" value="@Model.City">
+                            @* Select country *@
+                            <div class="mb-4">
+
+                                <select onchange="GetCountryvalue()" id="country" name="Country" class="form-control">
+                                </select>
+                                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                            </div>
+                                                     
+                            <div class="mb-4">
+
+                                <select id="city" name="City" class="form-control">
+                                    <option selected disabled>Please Select a city</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
                             </div>
                             <div class="mb-3">
                                 <label for="gender" class="form-label">Gender</label>
-                                <select name="Gender" id="gender" class="form-control" >
-                                    <option selected value="Male">Male</option>
-                                    <option selected value="Female">Female</option>
+                                <select name="Gender" id="gender" class="form-control">
+
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
                                 </select>
                             </div>
 
@@ -230,6 +242,60 @@
 
         }
     }
+    $.ajax({
+        type: "GET",
+        url: "/Accounts/GetCountryOptions",
+        data: "{}",
+        success: function (data) {
+            console.log(data)
+            if (data != null) {
+                var jsondata = JSON.parse(data);
+                console.log(jsondata)
+                var s = '<option disabled selected>Please Select a country</option>';
+                for (var i = 0; i < jsondata.length; i++) {
+                    console.log('row: ', jsondata[i].Countryname)
+                    s += '<option value="' + jsondata[i].CountryId + '">' + jsondata[i].Countryname + '</option>';
+                }
+            }
+
+
+            $("#country").html(s);
+        }
+    });
+
+    //function to get the value of countt
+    function GetCountryvalue() {
+        var country = document.getElementById("country").value;
+
+        populateCities(country)
+    }
+
+    //function to populate cities
+    function populateCities(countryid) {
+
+        $.ajax({
+            type: "GET",
+            url: "/Accounts/GetCityOptions",
+            data: { id: parseInt(countryid) },
+            success: function (data) {
+                console.log(data)
+                if (data != null) {
+                    var jsondata = JSON.parse(data);
+                    console.log(data)
+                    var s = '<option selected disabled >Please Select a city</option>';
+                    for (var i = 0; i < jsondata.length; i++) {
+                        console.log('row: ', jsondata[i].Cityname)
+                        s += '<option value="' + jsondata[i].CityId + '">' + jsondata[i].CityName + '</option>';
+                    }
+                }
+
+
+                $("#city").html(s);
+            }
+        });
+
+    }
+
 
     function validate(){
         let email = document.getElementById("emailadd").value;

@@ -46,6 +46,7 @@ namespace SocialNetwork_Web.Controllers
                     {
                         TempData["lmessage"] = "Login Successful!";
                         FormsAuthentication.SetAuthCookie(u.Email, false);
+                    
 
                         //set usr in tempdata and pass to the homepage
                         Session["loggedinUser"] = u;

@@ -78,7 +78,7 @@ namespace SocialNetwork_Dal.concrete
             User user = new User();
             DataTable dt = db.execGetProc("spGetUserProfile", sqlParameters);
 
-            //u.UserId, u.Username,u.Email,u.CreatedAt,up.DateOfBirth,up.ProfilePic,up.Gender,up.city
+            //u.UserId,u.UserName,u.Email,u.[Password],u.Phone,u.CreatedAt,up.Country,up.City,up.Gender,up.ProfilePic,up.DateOfBirth
 
             if (dt.Rows.Count>0) {
             
@@ -88,11 +88,19 @@ namespace SocialNetwork_Dal.concrete
                 user.UserName = r["UserName"].ToString();
                 user.Email = r["Email"].ToString();
                 user.CreatedAt =  Convert.ToDateTime(r["CreatedAt"]);
-                user.Dob = Convert.ToDateTime( r["DateOfBirth"]);
+                //if(r["DateOfBirth"] != DBNull.Value)
+                //{
+                user.Dob = r["DateOfBirth"].ToString();
+                //}
+                //else
+                //{
+                //    user.Dob = null;
+                //}
+                
                 user.ProfilePicPath = r["ProfilePic"].ToString();
                 user.Gender = r["Gender"].ToString();
-                user.City = r["City"].ToString() ;
-                user.Country = r["Country"].ToString() ;
+                user.City = r["CityName"].ToString() ;
+                user.Country = r["CountryName"].ToString() ;
                 user.Password = r["Password"].ToString();
                 user.Phone = r["Phone"].ToString();
 
@@ -139,6 +147,7 @@ namespace SocialNetwork_Dal.concrete
                 sqlParameters.Add(new SqlParameter("@password", user.Password));
                 sqlParameters.Add(new SqlParameter("@email", user.Email));
                 sqlParameters.Add(new SqlParameter("@profilepicpath", user.ProfilePicPath));
+                sqlParameters.Add(new SqlParameter("@country", user.Country));
                 sqlParameters.Add(new SqlParameter("@city", user.City));
                 sqlParameters.Add(new SqlParameter("@gender", user.Gender));
                 //sqlParameters.Add(new SqlParameter("@Username", s.Username));
@@ -162,7 +171,8 @@ namespace SocialNetwork_Dal.concrete
         public List<User> GetOtherUsers(int id)
         {
             List<User> users = new List<User>();
-            string query = $"Select * from UsersTb where UserId != {id}";
+            string query = $"Select u.UserId,u.UserName,up.ProfilePic from UsersTb u left join UserProfile up on u.UserId=up.UserId " +
+                            $"where u.UserId!= {id}";
 
             DataTable dt = db.execQuery(query);
             if(dt.Rows.Count > 0)
@@ -172,7 +182,8 @@ namespace SocialNetwork_Dal.concrete
                     User user = new User();
                     user.Id = Convert.ToInt32(dr["UserId"]);
                     user.UserName= dr["UserName"].ToString();
-                    user.Email = dr["email"].ToString();
+                    
+                    user.ProfilePicPath = dr["ProfilePic"].ToString();
 
                     users.Add(user);
                 }

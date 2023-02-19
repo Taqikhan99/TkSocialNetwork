@@ -21,12 +21,20 @@
                 <div class="peoplecard col-sm-5 p-2 col-md-4 col-lg-3  ms-2 mb-3">
 
                     <h5>@p.UserName</h5>
-                    <img style="width:50%;border-radius:50%" src="~/Content/images/user2.jpg" />
+                    @if (p.ProfilePicPath != "" && p.ProfilePicPath != null)
+                    {
+                        <img style="width:50%;border-radius:50%" src="@Url.Content(p.ProfilePicPath)" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/images/user.png" />
+                    }
+
                     <div class="btnsec">
-                        <a href=""  class="btn btn-success">Add Friend</a>
+                        <a href="" class="btn btn-success">Add Friend</a>
                         <a href="" class="btn btn-primary">View Profile</a>
                     </div>
-                    
+
 
                 </div>
             }
