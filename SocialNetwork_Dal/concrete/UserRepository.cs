@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.UI.WebControls;
 
 namespace SocialNetwork_Dal.concrete
 {
@@ -171,8 +172,7 @@ namespace SocialNetwork_Dal.concrete
         public List<User> GetOtherUsers(int id)
         {
             List<User> users = new List<User>();
-            string query = $"Select u.UserId,u.UserName,up.ProfilePic from UsersTb u left join UserProfile up on u.UserId=up.UserId " +
-                            $"where u.UserId!= {id}";
+            string query = $"Select u.UserId,u.UserName,up.ProfilePic from UsersTb u left join UserProfile up on u.UserId=up.UserId ";
 
             DataTable dt = db.execQuery(query);
             if(dt.Rows.Count > 0)
@@ -185,12 +185,52 @@ namespace SocialNetwork_Dal.concrete
                     
                     user.ProfilePicPath = dr["ProfilePic"].ToString();
 
+                    //if(dr["reqstatus"] != DBNull.Value)
+                    //    user.ReqStatus = Convert.ToInt32(dr["reqstatus"]);
+
                     users.Add(user);
                 }
             }
 
             return users;
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+
+        #region Friend Request Related Work
+        public bool SendRequest(int from, int to)
+        {
+            
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@from", from));
+            sqlParameters.Add(new SqlParameter("@to", to));
+
+            bool inserted = db.execInsertProc("spSendReq", sqlParameters);
+
+            return inserted; 
+
+        }
+
+
+        //get the friend req status for the id
+        public int GetFriendReqStatus(int toid,int fromid)
+        {
+            int friendStatus = 0;
+
+            string query = $"Select fr.Status  from FriendReqTb fr where ReqFrom in({fromid},{toid}) and ReqTo in ({fromid},{toid})";
+
+            DataTable dt= db.execQuery(query);
+
+            if(dt.Rows.Count>0)
+            {
+                DataRow r = dt.Rows[0];
+                friendStatus = Convert.ToInt32(r["status"]);
+
+            }
+            return friendStatus;
+
         }
 
         #endregion

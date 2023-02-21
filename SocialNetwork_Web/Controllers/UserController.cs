@@ -10,6 +10,7 @@ using System.Net.NetworkInformation;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace SocialNetwork_Web.Controllers
 {
@@ -43,6 +44,16 @@ namespace SocialNetwork_Web.Controllers
             try
             {
                 User user=userRepo.GetProfileData(Id);
+                var cuser = Session["loggedinUser"] as User;
+                if(cuser.Id != Id)
+                {
+                    int status=userRepo.GetFriendReqStatus(Id, cuser.Id);
+                    ViewBag.frStatus=status;
+
+
+                }
+
+
                 return View(user);
             }
             catch (Exception ex)
@@ -53,6 +64,11 @@ namespace SocialNetwork_Web.Controllers
 
             
         }
+
+
+       
+
+
 
         [HttpPost]
         public ActionResult UserProfile(User user)
@@ -115,23 +131,19 @@ namespace SocialNetwork_Web.Controllers
 
                 }
                 TempData["message"] = "Post Not Created";
-                return RedirectToAction("ErrorPage", "Account");
+                return RedirectToAction("ErrorPage", "Accounts");
 
 
             }
             catch(Exception ex)
             {
                 TempData["message"] = ex.Message;
-                return RedirectToAction("ErrorPage","Account");
+                return RedirectToAction("ErrorPage","Accounts");
             }
 
 
             
         }
-
-
-        //Get country options
-        
 
 
 
@@ -149,12 +161,37 @@ namespace SocialNetwork_Web.Controllers
             catch (Exception ex)
             {
                 TempData["message"] = ex.Message;
-                return RedirectToAction("ErrorPage", "Account");
+                return RedirectToAction("ErrorPage", "Accounts");
             }
             
 
         }
 
+
+
+
+        [HttpPost]
+        public ActionResult SendRequest(int toId)
+        {
+            try
+            {
+                var cuser = Session["loggedinUser"] as User;
+
+                bool send = userRepo.SendRequest(cuser.Id, toId);
+                
+                if(send)
+                {
+                    return Json(new {message="Send Req Success",code=1},JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { message = "Send Req Failed", code = 2 }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Account");
+            }
+        }
 
     }
 }

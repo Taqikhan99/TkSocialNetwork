@@ -17,7 +17,11 @@ namespace SocialNetwork_Dal.Abstract
 
         List<User> GetOtherUsers(int id);
 
-        
+        bool SendRequest(int from, int to);
+        int GetFriendReqStatus(int toid, int fromid);
+
+
+
     }
 
 }

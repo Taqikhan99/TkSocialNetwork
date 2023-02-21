@@ -3,51 +3,51 @@
     ViewBag.Title = "MyProfile";
 }
 
-
+@{
+    var cuser = Session["loggedinUser"] as SocialNetwork_Dal.Entities.User;
+}
 <style>
-    .profiletopSec{
-        height:auto;
-        min-height:400px;
-        width:100%;
-        border:1px solid gray;
+    .profiletopSec {
+        height: auto;
+        min-height: 400px;
+        width: 100%;
+        border: 1px solid gray;
     }
+
     .profileImg {
         height: 250px;
         width: 250px;
-        cursor:pointer;
-       
-
+        cursor: pointer;
     }
+
         .profileImg > img {
             width: 90%;
             height: 90%;
             border-radius: 50%;
         }
 
-    .image-upload{
-       
+    .image-upload {
     }
-    .image-upload > input {
-        display: none;
-    }
-        
+
+        .image-upload > input {
+            display: none;
+        }
+
         .image-upload img {
             width: 40px;
             cursor: pointer;
-            margin-top:2rem;
-           
+            margin-top: 2rem;
         }
-
 </style>
 
 @*<div class="image-upload">
 
-    <label for="file-input">
-        <img src="~/Content/images/upload.png" />
-    </label>
+        <label for="file-input">
+            <img src="~/Content/images/upload.png" />
+        </label>
 
-    <input id="file-input" name="file" type="file" onchange="readURL(this)" />
-</div>*@
+        <input id="file-input" name="file" type="file" onchange="readURL(this)" />
+    </div>*@
 
 
 
@@ -65,27 +65,46 @@
 
                 }
                 else
-                {   
+                {
                     <img src="~/Content/images/user.png" />
                 }
             </div>
             <div class="ProfileInfo col-md-8">
 
-                
 
-                    <div class="col-md-8  ps-5">
-                        <h4 class="mb-4">User Name: @Model.UserName</h4>
-                        <h4 class="mb-4">Email: @Model.Email</h4>
-                        <h4 class="mb-4">Phone: @Model.Phone</h4>
-                        <h4 class="mb-4">Date of Birth: @Model.Dob</h4>
-                        <h4 class="mb-4">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</h4>
-                        <h4 class="mb-4">Lives in: @Model.City , @Model.Country </h4>
+
+                <div class="col-md-8  ps-5">
+                    <h4 class="mb-4">User Name: @Model.UserName</h4>
+                    <h4 class="mb-4">Email: @Model.Email</h4>
+                    <h4 class="mb-4">Phone: @Model.Phone</h4>
+                    <h4 class="mb-4">Date of Birth: @Model.Dob</h4>
+                    <h4 class="mb-4">Joined on: @Model.CreatedAt.ToString("dd/MM/yyyy")</h4>
+                    <h4 class="mb-4">Lives in: @Model.City , @Model.Country </h4>
+
+                    @if (Model.Id != cuser.Id)
+                    {
+
+                        if (ViewBag.frStatus == 0)
+                        {
+                            <button class="btn w-50 btn-success mx-auto " onclick="SendRequest(this,@Model.Id)">Add Friend</button>
+                        }
+                        else if (ViewBag.frStatus == 1)
+                        {
+                            <button disabled class="btn w-50 btn-success mx-auto">Req Pending</button>
+                        }
+
+                    }
+                    else
+                    {
                         <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn w-50 btn-primary mx-auto">Edit Profile</button>
-                    </div>
-                    
+                    }
 
 
-                
+                </div>
+
+
+
+
 
                 <div class="row mb-5">
 
@@ -93,19 +112,19 @@
 
                 </div>
                 <div class="row mt-5">
-                    
+
 
                 </div>
 
             </div>
 
         </div>
-       
-        
+
+
 
         @*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Launch demo modal
-        </button>*@
+                Launch demo modal
+            </button>*@
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -142,7 +161,7 @@
                                 </select>
                                 @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
                             </div>
-                                                     
+
                             <div class="mb-4">
 
                                 <select id="city" name="City" class="form-control">
@@ -192,9 +211,6 @@
 
     </section>
     <section class="showmyPosts">
-
-
-
     </section>
 
 
@@ -206,7 +222,7 @@
     console.log("profile pic:"+'@Model.ProfilePicPath');
     function readURL(input) {
         console.log(input);
-        
+
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
@@ -221,27 +237,48 @@
             reader.readAsDataURL(input.files[0]);
 
 
-            //var formData = new FormData();
-            //formData.append("HttpPostedFileBase", input.files[0]);
-            //console.log("form:",formData);
-            //console.log("file",input.files[0]);
 
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/User/UploadDp",
-            //    cache: false,
-            //    enctype: "multipart/form-data",
-            //    data: { file: input.files[0] },
-            //    processData: false,
-            //    contentType: false,
-            //    success: function (data) {
-            //        console.log(data)
-            //    }
-            //});
 
 
         }
     }
+    //send req func
+    function SendRequest(e, toId) {
+        //alert("started Sending")
+        console.log(e.innerHTML);
+        console.log(toId);
+
+        e.innerHTML = "Req Send!"
+
+        $.ajax({
+            type: "POST",
+            url: "/User/SendRequest",
+            data: { toId: toId },
+            success: function (data) {
+                console.log(data)
+                if (data != null) {
+                    if (data.code == 1) {
+
+                        e.innerHTML = "Req Send";
+                        e.disabled = true;
+                        swal({
+                            title: "Succss",
+                            text: "Send Request Success!",
+                            icon: "success",
+                        });
+                    }
+                }
+
+
+
+            }
+        });
+
+
+    }
+
+
+
     $.ajax({
         type: "GET",
         url: "/Accounts/GetCountryOptions",

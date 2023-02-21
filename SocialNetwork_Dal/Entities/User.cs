@@ -39,6 +39,7 @@ namespace SocialNetwork_Dal.Entities
         public int countryid { get; set; }
         public string City { get; set; }
 
+        public int ReqStatus { get; set; }
         public string Country { get; set; }
         public string Gender { get; set; }
 
