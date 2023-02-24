@@ -15,5 +15,6 @@ namespace SocialNetwork_Dal.Abstract
         bool EmailExists(string Email);
         string Countryoptions();
         string CityOptions(int id);
+       
     }
 }

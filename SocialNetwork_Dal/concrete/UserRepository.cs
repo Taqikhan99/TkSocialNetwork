@@ -233,6 +233,53 @@ namespace SocialNetwork_Dal.concrete
 
         }
 
+        public List<FriendReq> GetFriendRequests(int id)
+        {
+            List<FriendReq> friendReqs = new List<FriendReq>();
+
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@curuserId", id));
+
+            DataTable dt = db.execGetProc("spGetIncomingRequests", sqlParameters);
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow r in dt.Rows)
+                {
+
+                    FriendReq req = new FriendReq();
+                    req.RequesterId = Convert.ToInt32(r["UserId"]);
+                    req.RequesterName = Convert.ToString(r["UserName"]);
+                    req.RequesterPic = Convert.ToString(r["ProfilePic"]);
+                    req.RequestTime = Convert.ToDateTime(r["ReqAt"]);
+
+                    friendReqs.Add(req);
+
+                }
+            }
+
+            return friendReqs;
+
+
+        }
+
+
+        public bool acceptRequest(int acceptedBy, int acceptedOf)
+        {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@acceptedBy", acceptedBy));
+            sqlParameters.Add(new SqlParameter("@acceptedOf", acceptedOf));
+
+            bool updated = db.execInsertProc("spAcceptReq", sqlParameters);
+
+            return updated;
+
+
+        }
+
+
+
+
         #endregion
 
     }

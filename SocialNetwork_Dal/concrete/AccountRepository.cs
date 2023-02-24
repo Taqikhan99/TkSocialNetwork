@@ -45,6 +45,7 @@ namespace SocialNetwork_Dal.concrete
                 user1.UserName = r["UserName"].ToString();
                 user1.Email = r["Email"].ToString();
                 user1.Phone = r["Phone"].ToString();
+
                
 
             }
@@ -124,5 +125,9 @@ namespace SocialNetwork_Dal.concrete
                 return null;
             }
         }
+
+
+        
+
     }
 }

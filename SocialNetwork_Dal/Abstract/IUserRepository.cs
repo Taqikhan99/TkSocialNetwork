@@ -19,6 +19,10 @@ namespace SocialNetwork_Dal.Abstract
 
         bool SendRequest(int from, int to);
         int GetFriendReqStatus(int toid, int fromid);
+        List<FriendReq> GetFriendRequests(int id);
+        bool acceptRequest(int fromid, int ofId);
+        
+
 
 
 

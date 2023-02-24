@@ -98,9 +98,11 @@
     <Content Include="Content\images\1598718861812.jpg" />
     <Content Include="Content\images\c794d9376104f7525b5cad2ba44e7915.jpg" />
     <Content Include="Content\images\dank-meme-300x300.jpg" />
+    <Content Include="Content\images\group.png" />
     <Content Include="Content\images\letter-t.png" />
     <Content Include="Content\images\twitter-down-1657803458.jpg" />
     <Content Include="Content\images\upload.png" />
+    <Content Include="Content\images\user-48.png" />
     <Content Include="Content\images\user.png" />
     <Content Include="Content\images\user1.jpg" />
     <Content Include="Content\images\user2.jpg" />

@@ -50,6 +50,7 @@ namespace SocialNetwork_Web.Controllers
 
                         //set usr in tempdata and pass to the homepage
                         Session["loggedinUser"] = u;
+                        
 
                         return RedirectToAction("Index", "User");
                     }
@@ -153,6 +154,13 @@ namespace SocialNetwork_Web.Controllers
             ViewBag.message = TempData["message"];
             return View();
         }
+
+        #region Getting Incoming Requests
+
+        
+
+
+        #endregion
 
     }
 }

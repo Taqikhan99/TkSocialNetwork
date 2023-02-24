@@ -12,6 +12,14 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
+
+    @* Check if there is any incoming req  *@
+    @{
+        var requests = Session["frRequests"] as List<SocialNetwork_Dal.Entities.FriendReq>;
+    }
+
+
+
     <nav class="navbar navbar-expand-lg ">
 
         <div class="container d-flex justify-content-between align-items-center">
@@ -23,16 +31,28 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                    <li class="nav-item ms-3">
                         <a class="nav-link" aria-current="page" href="@Url.Action("Index","User")">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item ms-3">
                         <a class="nav-link" href="@Url.Action("PeoplesPage","User")">People</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
+                    @*<li class="nav-item">
+                            <a class="nav-link" href="#">Notifications</a>
+                        </li>*@
+
+                    <li class="nav-item ms-3">
+                        <a class="nav-link" id="reqnot">
+
+
+                            <img style="height:20px;" src="~/Content/images/user-48.png" />
+                            @if (requests.Count > 0)
+                            {
+                                <span style="color:yellow;">@requests.Count</span>
+                            }
+                        </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item ms-3">
 
                         @Html.ActionLink("Log out", "Signout", "Accounts", null, new { @class = "nav-link", style = "text-decoration:none;color:white" })
                     </li>
@@ -40,7 +60,36 @@
             </div>
         </div>
     </nav>
+    <div class="reqbox">
 
+        <p>Friend Requests</p>
+        @foreach (var req in requests)
+        {
+
+
+            <div class="d-flex  p-2">
+                @if (req.RequesterPic != null && req.RequesterPic != "")
+                {
+                    <img style="height:75px;border-radius:10px;" src="@Url.Content(req.RequesterPic)" alt="requester pic" />
+
+                }
+                else
+                {
+                    <img style="height:30px;" src="~/Content/images/user.png" />
+                }
+                <div class="mx-3 mb-2">
+                    <p>@req.RequesterName</p>
+                    <div class=" d-flex justify-content-between">
+                        <button class="btn btn-sm btn-light" onclick="acceptReq(@req.RequesterId)">Accept</button>
+                        <button class="ms-4 btn btn-sm btn-warning">Reject</button>
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
     <div class="container body-content">
         @RenderBody()
 
@@ -50,5 +99,49 @@
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+
+        function hideReqBox() {
+            $(".reqbox").removeClass("reqboxactive");
+        }
+
+        $("#reqnot").click(function () {
+            $(".reqbox").toggleClass("reqboxactive");
+        });
+
+        function acceptReq(userid) {
+
+            alert(userid);
+
+            $.ajax({
+                type: "POST",
+                url: "/User/AcceptRequest",
+                data: { reqId: userid },
+                success: function (data) {
+                    console.log(data)
+                    if (data != null) {
+                        if (data.code == 1) {
+
+
+                            swal({
+                                title: "Succss",
+                                text: "Accepted Request Success!",
+                                icon: "success",
+                            });
+                            hideReqBox();
+                            location.reload();
+                        }
+                    }
+
+
+
+                }
+            });
+
+        }
+
+    </script>
+
 </body>
 </html>

@@ -3,9 +3,9 @@
     background-color: #f2f2f2;
 }
 .navbar {
-    background: #e44d3a; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #e44d3a, #e44d3a); /* Chrome 10-25, Safari 5.1-6 */
-    
+    /*background: #e44d3a;*/ /* fallback for old browsers */
+    /*background: -webkit-linear-gradient(to right, #e44d3a, #e44d3a);*/ /* Chrome 10-25, Safari 5.1-6 */
+    background-image: linear-gradient( 171.8deg, rgba(5,111,146,1) 13.5%, rgba(6,57,84,1) 78.6% );
 }
 #navlogo{
     font-size:2.5rem;
@@ -37,10 +37,9 @@
 
 }
 .prldiv1 {
-    background: #e44d3a; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #e44d3a, #e44d3a); /* Chrome 10-25, Safari 5.1-6 */
-    height:100px;
-    width:100%;
+    background-image: linear-gradient( 171.8deg, rgba(5,111,146,1) 13.5%, rgba(6,57,84,1) 78.6% );
+    height: 100px;
+    width: 100%;
 }
 .dpcontainer {
    
@@ -119,9 +118,8 @@
     }
 
 .addpostdiv > button {
-    background: #e44d3a; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #e44d3a, #e44d3a); /* Chrome 10-25, Safari 5.1-6 */
-    color:white;
+    background-image: linear-gradient( 171.8deg, rgba(5,111,146,1) 13.5%, rgba(6,57,84,1) 78.6% );
+    color: white;
 }
 ..addpostdiv > button:hover{
     background-color:#b50505 !important;
@@ -166,3 +164,38 @@
 
 
 /**/
+
+/*reqbox*/
+.reqbox {
+    /* fallback for old browsers */
+    background-image: linear-gradient( 171.8deg, rgba(5,111,146,1) 13.5%, rgba(6,57,84,1) 78.6% );
+    /*background: #e44d3a;
+    background: -webkit-linear-gradient(to right, #e44d3a, #e44d3a);*/
+    color: white;
+    min-height: 200px;
+    width: 350px;
+    position: absolute;
+    right: 0;
+    overflow-y: auto;
+    transform: translateX(350px);
+    transition: transform ease 1s;
+    padding: 1rem;
+}
+
+.reqboxactive {
+    transform: translateX(0px);
+}
+#reqnot:hover{
+    color:yellow;
+    cursor:pointer;
+}
+
+@media screen and (max-width:900px){
+    .reqbox {
+        width: 100vw;
+        transform: translateX(100vw);
+    }
+    .reqboxactive {
+        transform: translateX(0px);
+    }
+}

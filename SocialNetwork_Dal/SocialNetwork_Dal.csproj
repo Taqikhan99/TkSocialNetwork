@@ -57,6 +57,7 @@
     <Compile Include="concrete\AccountRepository.cs" />
     <Compile Include="concrete\DbClass.cs" />
     <Compile Include="concrete\UserRepository.cs" />
+    <Compile Include="Entities\FriendReq.cs" />
     <Compile Include="Entities\Post.cs" />
     <Compile Include="Entities\UserLoginCheck.cs" />
     <Compile Include="Entities\User.cs" />
