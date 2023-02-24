@@ -1,0 +1,77 @@
+﻿@model List<SocialNetwork_Dal.Entities.User>
+@{
+    ViewBag.Title = "FriendsPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    @@media only screen and (min-width : 1050px) {
+        .peoplecard {
+            width: 300px;
+        }
+    }
+</style>
+
+@{
+    var cuser = Session["loggedinUser"] as SocialNetwork_Dal.Entities.User;
+}
+
+<div class="container p-3">
+
+
+    <div class="row p-1 mb-3 bg-light">
+        <h3>My Friends</h3>
+    </div>
+
+
+
+    <div class="row ">
+
+        @* for each person in peoples table make a card to shoe them *@
+        @{
+            foreach (var p in Model)
+            {
+                if (cuser.Id != p.Id)
+                {
+                    <div class="peoplecard col-sm-10 p-2 col-md-5 col-lg-3 ms-2  mb-3">
+
+                        <h5>@p.UserName @p.Id </h5>
+                        @if (p.ProfilePicPath != "" && p.ProfilePicPath != null)
+                        {
+                            <img style="width:50%;height:50%;border-radius:50%" src="@Url.Content(p.ProfilePicPath)" />
+                        }
+                        else
+                        {
+                            <img src="~/Content/images/user.png" />
+                        }
+
+                        <div class="btnsec">
+                            @*@if (@p.ReqStatus == 0)
+                                {
+                                    <button type="button" class="btn btn-success btnsender" onclick="SendRequest(this,@p.Id)">Add Friend</button>
+                                }
+                                else if (@p.ReqStatus == 1)
+                                {
+                                    <button disabled type="button" class="btn btn-success" onclick="">Req Send!</button>
+                                }*@
+
+
+                            @*<button href="" class="btn btn-primary">View Profile</button>*@
+                            @Html.ActionLink("View Profile", "UserProfile", "User", new { id = p.Id }, new { @class = "btn btn-primary ", @style = "text-decoration:none;" })
+                        </div>
+
+
+
+
+                    </div>
+                }
+            }
+        }
+
+
+    </div>
+
+</div>
+
+

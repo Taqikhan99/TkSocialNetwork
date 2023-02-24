@@ -21,7 +21,9 @@ namespace SocialNetwork_Dal.Abstract
         int GetFriendReqStatus(int toid, int fromid);
         List<FriendReq> GetFriendRequests(int id);
         bool acceptRequest(int fromid, int ofId);
-        
+        bool rejectRequest(int acceptedBy, int acceptedOf);
+
+        List<User> GetMyFriends(int id);
 
 
 

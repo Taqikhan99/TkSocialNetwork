@@ -37,6 +37,9 @@
                     <li class="nav-item ms-3">
                         <a class="nav-link" href="@Url.Action("PeoplesPage","User")">People</a>
                     </li>
+                    <li class="nav-item ms-3">
+                        <a class="nav-link" href="@Url.Action("FriendsPage","User")">My Friends</a>
+                    </li>
                     @*<li class="nav-item">
                             <a class="nav-link" href="#">Notifications</a>
                         </li>*@
@@ -124,14 +127,16 @@
                         if (data.code == 1) {
 
 
+
+
                             swal({
-                                title: "Succss",
-                                text: "Accepted Request Success!",
-                                icon: "success",
-                            });
-                            hideReqBox();
-                            location.reload();
-                        }
+                                title: "Success", text: "Accepted Request Success!", type:
+                                    "success"
+                            }).then(function () {
+                                location.reload();
+                            }
+                            );
+                        }   
                     }
 
 

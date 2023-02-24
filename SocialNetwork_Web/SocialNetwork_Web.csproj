@@ -159,6 +159,7 @@
     <Content Include="Views\Accounts\ErrorPage.cshtml" />
     <Content Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\PeoplesPage.cshtml" />
+    <Content Include="Views\User\FriendsPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

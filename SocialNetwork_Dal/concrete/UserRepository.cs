@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -277,8 +278,52 @@ namespace SocialNetwork_Dal.concrete
 
         }
 
+        public bool rejectRequest(int acceptedBy, int acceptedOf)
+        {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@acceptedBy", acceptedBy));
+            sqlParameters.Add(new SqlParameter("@acceptedOf", acceptedOf));
+
+            bool updated = db.execInsertProc("spRejectReq", sqlParameters);
+
+            return updated;
 
 
+        }
+
+
+
+
+        #endregion
+
+        #region Get friends on FriendsPage
+
+        public List<User> GetMyFriends(int id)
+        {
+            List<User> users = new List<User>();
+            string query = $"SELECT u.UserId,u.UserName,up.ProfilePic FROM FriendshipTb f inner join UsersTb u on u.UserId=f.UserB " +
+                           $"left join UserProfile up on up.UserId = f.UserB WHERE UserA = {id} UNION " +
+                           $"SELECT u.UserId,u.UserName,up.ProfilePic FROM FriendshipTb f inner join UsersTb u on u.UserId = f.UserA " +
+                           $"left join UserProfile up on up.UserId = f.UserA WHERE UserB = {id}; ";
+
+            DataTable dt = db.execQuery(query);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    User user = new User();
+                    user.Id = Convert.ToInt32(dr["UserId"]);
+                    user.UserName = dr["UserName"].ToString();
+
+                    user.ProfilePicPath = dr["ProfilePic"].ToString();
+
+                    users.Add(user);
+                }
+            }
+
+            return users;
+            throw new NotImplementedException();
+        }
 
         #endregion
 

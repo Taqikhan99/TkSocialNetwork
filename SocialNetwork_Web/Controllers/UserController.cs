@@ -185,10 +185,7 @@ namespace SocialNetwork_Web.Controllers
         #endregion
 
 
-
-
-
-        #region Sending Friend Request
+        #region  Friend Request Related Work
 
 
         [HttpPost]
@@ -214,7 +211,7 @@ namespace SocialNetwork_Web.Controllers
             }
         }
 
-        #endregion
+        
 
         public ActionResult AcceptRequest(int reqId)
         {
@@ -222,6 +219,27 @@ namespace SocialNetwork_Web.Controllers
             {
                 var cuser = Session["loggedinUser"] as User;
                 bool accepted = userRepo.acceptRequest(cuser.Id,reqId);
+
+                if(accepted)
+                {
+                    TempData["accepted"] = "Req Accepted Success!";
+
+                    return Json(new { Message="Success!", code = 1 },JsonRequestBehavior.AllowGet);
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Account");
+            }
+         }
+        public ActionResult RejectRequest(int reqId)
+        {
+            try
+            {
+                var cuser = Session["loggedinUser"] as User;
+                bool accepted = userRepo.rejectRequest(cuser.Id,reqId);
 
                 if(accepted)
                 {
@@ -256,7 +274,29 @@ namespace SocialNetwork_Web.Controllers
             }
 
         }
+        #endregion
 
 
+        #region FriendsPage
+
+        public ActionResult FriendsPage()
+        {
+            try
+            {
+                var cuser = Session["loggedinUser"] as User;
+                //will pass the current user id to make get reamining users from user table
+                List<User> users = userRepo.GetMyFriends(cuser.Id);
+
+                return View(users);
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Accounts");
+            }
+        }
+
+
+        #endregion
     }
 }
