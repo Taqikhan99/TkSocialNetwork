@@ -196,31 +196,7 @@
 
 
                 </div>
-                @* -------- *@@* single post *@
-                <div class="Post ">
-                    <div class="PostTop p-3 row">
-                        <div class="dp2  col-2">
-                            <img src="~/Content/images/user4.jpg" />
-                        </div>
-                        <div class="col-8">
-                            <h6>Taqi Ahmed</h6>
-                            <p class="text-secondary ms-1" style="font-size:12px;">5 mins ago</p>
-                        </div>
-                    </div>
-                </div>
-                @* -------- *@@* single post *@
-                <div class="Post ">
-                    <div class="PostTop p-3 row">
-                        <div class="dp2  col-2">
-                            <img src="~/Content/images/user4.jpg" />
-                        </div>
-                        <div class="col-8">
-                            <h6>Taqi Ahmed</h6>
-                            <p class="text-secondary ms-1" style="font-size:12px;">5 mins ago</p>
-
-                        </div>
-                    </div>
-                </div>
+                
                 @* -------- *@
             </div>
 
@@ -272,6 +248,12 @@
     }
 
 
+
+    // A $( document ).ready() block.
+    $(document).ready(function () {
+        console.log("ready!");
+        populatePosts()
+    });
 
     console.log('@Session["loggedinUser"]')
 
@@ -356,6 +338,26 @@
         });
     }
 
+    //function to populate the list of post 
+    function populatePosts() {
+
+
+
+        $.ajax({
+            type: "GET",
+            url: "/User/GetPosts",
+            
+            success: function (data) {
+                console.log(data)
+                
+
+
+                
+            }
+        });
+
+
+    }
 
 
 

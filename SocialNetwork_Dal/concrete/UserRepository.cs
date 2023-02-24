@@ -291,9 +291,6 @@ namespace SocialNetwork_Dal.concrete
 
         }
 
-
-
-
         #endregion
 
         #region Get friends on FriendsPage
@@ -327,5 +324,35 @@ namespace SocialNetwork_Dal.concrete
 
         #endregion
 
+
+        #region Get and show all posts
+
+        public List<Post> GetAllPosts()
+        {
+            List<Post> posts = new List<Post>();
+            DataTable dt = db.execGetProc("spGetAllPosts");
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow r in dt.Rows)
+                {
+
+                    Post p = new Post();
+                    p.Id = Convert.ToInt32(r["PostId"]);
+                    p.PostText = Convert.ToString(r["Text"]);
+                    p.PostImagePath = Convert.ToString(r["PostImage"]);
+                    p.PostTime = Convert.ToDateTime(r["PostedAt"]);
+                    p.Likes = Convert.ToInt32(r["LikesCount"]);
+                    p.PosterName = Convert.ToString(r["UserName"]);
+                    p.PosterImagePath = Convert.ToString(r["ProfilePic"]);
+
+                    posts.Add(p);
+
+                }
+            }
+            return posts;
+        }
+
+        #endregion
     }
 }

@@ -24,7 +24,7 @@ namespace SocialNetwork_Dal.Abstract
         bool rejectRequest(int acceptedBy, int acceptedOf);
 
         List<User> GetMyFriends(int id);
-
+        List<Post> GetAllPosts();
 
 
 

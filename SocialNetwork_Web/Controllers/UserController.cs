@@ -28,11 +28,11 @@ namespace SocialNetwork_Web.Controllers
         public ActionResult Index()
         {
             var u = Session["loggedinUser"] as User;
-                
+
             List<FriendReq> friendReqs = userRepo.GetFriendRequests(u.Id);
 
             Session["frRequests"] = friendReqs;
-            
+
 
             ViewBag.cuser = Session["loggedinUser"];
             TempData["loginmessage"] = TempData["lmessage"];
@@ -40,7 +40,7 @@ namespace SocialNetwork_Web.Controllers
             ViewBag.postcreated = TempData["postmessage"];
             ViewBag.reqAccepted = TempData["accepted"];
 
-            
+
 
             return View();
         }
@@ -48,19 +48,19 @@ namespace SocialNetwork_Web.Controllers
 
         #region Visiting and updating user profile
 
-        
+
         //View UserProfile
         [Authorize]
         public ActionResult UserProfile(int Id)
         {
             try
             {
-                User user=userRepo.GetProfileData(Id);
+                User user = userRepo.GetProfileData(Id);
                 var cuser = Session["loggedinUser"] as User;
-                if(cuser.Id != Id)
+                if (cuser.Id != Id)
                 {
-                    int status=userRepo.GetFriendReqStatus(Id, cuser.Id);
-                    ViewBag.frStatus=status;
+                    int status = userRepo.GetFriendReqStatus(Id, cuser.Id);
+                    ViewBag.frStatus = status;
 
 
                 }
@@ -74,7 +74,7 @@ namespace SocialNetwork_Web.Controllers
                 return RedirectToAction("ErrorPage", "Accounts");
             }
 
-            
+
         }
 
 
@@ -98,7 +98,7 @@ namespace SocialNetwork_Web.Controllers
                 return RedirectToAction("ErrorPage", "Accounts");
             }
 
-            return Json("Ok",JsonRequestBehavior.AllowGet);
+            return Json("Ok", JsonRequestBehavior.AllowGet);
         }
         #endregion
         ////upload profile pic
@@ -129,12 +129,13 @@ namespace SocialNetwork_Web.Controllers
             try
             {
                 var currentUser = (SocialNetwork_Dal.Entities.User)Session["loggedinUser"];
-                if(currentUser != null)
+                if (currentUser != null)
                 {
                     string message = userRepo.CreatePost(post, currentUser.Id);
 
                     //check if post created
-                    if (message == "OK") {
+                    if (message == "OK")
+                    {
 
                         TempData["postmessage"] = "Post Created Successfully";
                         return RedirectToAction("Index");
@@ -146,14 +147,14 @@ namespace SocialNetwork_Web.Controllers
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["message"] = ex.Message;
-                return RedirectToAction("ErrorPage","Accounts");
+                return RedirectToAction("ErrorPage", "Accounts");
             }
 
 
-            
+
         }
 
 
@@ -161,7 +162,7 @@ namespace SocialNetwork_Web.Controllers
 
         #region Going to Peoples page
 
-        
+
         //list people page
 
         public ActionResult PeoplesPage()
@@ -172,14 +173,14 @@ namespace SocialNetwork_Web.Controllers
                 //will pass the current user id to make get reamining users from user table
                 List<User> users = userRepo.GetOtherUsers(cuser.Id);
 
-                 return View(users);
+                return View(users);
             }
             catch (Exception ex)
             {
                 TempData["message"] = ex.Message;
                 return RedirectToAction("ErrorPage", "Accounts");
             }
-            
+
 
         }
         #endregion
@@ -196,10 +197,10 @@ namespace SocialNetwork_Web.Controllers
                 var cuser = Session["loggedinUser"] as User;
 
                 bool send = userRepo.SendRequest(cuser.Id, toId);
-                
-                if(send)
+
+                if (send)
                 {
-                    return Json(new {message="Send Req Success",code=1},JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Send Req Success", code = 1 }, JsonRequestBehavior.AllowGet);
                 }
                 return Json(new { message = "Send Req Failed", code = 2 }, JsonRequestBehavior.AllowGet);
 
@@ -211,20 +212,20 @@ namespace SocialNetwork_Web.Controllers
             }
         }
 
-        
+
 
         public ActionResult AcceptRequest(int reqId)
         {
             try
             {
                 var cuser = Session["loggedinUser"] as User;
-                bool accepted = userRepo.acceptRequest(cuser.Id,reqId);
+                bool accepted = userRepo.acceptRequest(cuser.Id, reqId);
 
-                if(accepted)
+                if (accepted)
                 {
                     TempData["accepted"] = "Req Accepted Success!";
 
-                    return Json(new { Message="Success!", code = 1 },JsonRequestBehavior.AllowGet);
+                    return Json(new { Message = "Success!", code = 1 }, JsonRequestBehavior.AllowGet);
                 }
                 return RedirectToAction("Index");
             }
@@ -233,19 +234,19 @@ namespace SocialNetwork_Web.Controllers
                 TempData["message"] = ex.Message;
                 return RedirectToAction("ErrorPage", "Account");
             }
-         }
+        }
         public ActionResult RejectRequest(int reqId)
         {
             try
             {
                 var cuser = Session["loggedinUser"] as User;
-                bool accepted = userRepo.rejectRequest(cuser.Id,reqId);
+                bool accepted = userRepo.rejectRequest(cuser.Id, reqId);
 
-                if(accepted)
+                if (accepted)
                 {
                     TempData["accepted"] = "Req Accepted Success!";
 
-                    return Json(new { Message="Success!", code = 1 },JsonRequestBehavior.AllowGet);
+                    return Json(new { Message = "Success!", code = 1 }, JsonRequestBehavior.AllowGet);
                 }
                 return RedirectToAction("Index");
             }
@@ -254,7 +255,7 @@ namespace SocialNetwork_Web.Controllers
                 TempData["message"] = ex.Message;
                 return RedirectToAction("ErrorPage", "Account");
             }
-         }
+        }
 
         public ActionResult GetFriendRequests(int id)
         {
@@ -298,5 +299,33 @@ namespace SocialNetwork_Web.Controllers
 
 
         #endregion
+
+
+        #region Get and show posts
+
+        public ActionResult GetPosts()
+        {
+            try
+            {
+                List<Post> allPosts = new List<Post>();
+
+                allPosts = userRepo.GetAllPosts();
+
+                if (allPosts.Count > 0)
+                {
+                    return Json(new { posts = allPosts, code = 1 }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { message = "Get Posts Success", code = 2 }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Account");
+            }
+
+            #endregion
+
+        }
     }
 }
