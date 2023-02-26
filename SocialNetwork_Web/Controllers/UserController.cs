@@ -32,7 +32,11 @@ namespace SocialNetwork_Web.Controllers
             List<FriendReq> friendReqs = userRepo.GetFriendRequests(u.Id);
 
             Session["frRequests"] = friendReqs;
+            List<Post> allPosts = new List<Post>();
 
+            allPosts = userRepo.GetAllPosts();
+
+            ViewBag.AllPosts = allPosts;
 
             ViewBag.cuser = Session["loggedinUser"];
             TempData["loginmessage"] = TempData["lmessage"];
@@ -301,31 +305,6 @@ namespace SocialNetwork_Web.Controllers
         #endregion
 
 
-        #region Get and show posts
-
-        public ActionResult GetPosts()
-        {
-            try
-            {
-                List<Post> allPosts = new List<Post>();
-
-                allPosts = userRepo.GetAllPosts();
-
-                if (allPosts.Count > 0)
-                {
-                    return Json(new { posts = allPosts, code = 1 }, JsonRequestBehavior.AllowGet);
-                }
-                return Json(new { message = "Get Posts Success", code = 2 }, JsonRequestBehavior.AllowGet);
-
-            }
-            catch (Exception ex)
-            {
-                TempData["message"] = ex.Message;
-                return RedirectToAction("ErrorPage", "Account");
-            }
-
-            #endregion
-
-        }
+        
     }
 }

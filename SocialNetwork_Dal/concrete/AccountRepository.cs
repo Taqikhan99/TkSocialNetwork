@@ -41,11 +41,10 @@ namespace SocialNetwork_Dal.concrete
                 user1 = new User();
                 DataRow r = dt.Rows[0];
                 user1.Id = Convert.ToInt32(r["UserId"]);
-                
                 user1.UserName = r["UserName"].ToString();
                 user1.Email = r["Email"].ToString();
                 user1.Phone = r["Phone"].ToString();
-
+                user1.ProfilePicPath = r["ProfilePic"].ToString();
                
 
             }

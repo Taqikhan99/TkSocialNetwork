@@ -16,7 +16,14 @@
 
     @{
         var currentUser = (SocialNetwork_Dal.Entities.User)Session["loggedinUser"];
-    }
+        var postslist = ViewBag.AllPosts;
+        string dpUrl = "~/Content/images/user.png";
+        if (currentUser.ProfilePicPath != "" && currentUser.ProfilePicPath != null)
+        {
+            dpUrl = currentUser.ProfilePicPath;
+        }
+
+}   
 
     <div class=" container p-3 mt-4 row">
 
@@ -27,8 +34,12 @@
         <div class="sectionleft col-md-4">
             <div class="profilelinkdiv mb-5">
                 <div class="prldiv1 mb-4">
-                    <div class="dpcontainer mb-5">
-                        <img src="~/Content/images/user4.jpg" />
+                    <div class="dpcontainer mb-5"> 
+                       
+                            <img src="@Url.Content(dpUrl)" />
+                       
+
+
                     </div>
 
 
@@ -36,14 +47,11 @@
                 <div class="p-1 ">
                     <h4 class="text-center my-3">
 
-                        @if (Session["loggedinUser"] != null)
-                        {
-                            @ViewBag.cuser.UserName
-                        }
+                        @currentUser.UserName
 
 
                     </h4>
-                    <p class="text-center text-secondary my-1"><small>Dot net Developer at Premier group</small></p>
+                    
                     <hr />
                     <h5 class="text-center text-secondary my-1"> Friends</h5>
                     <h5 class="text-center my-2"> 26</h5>
@@ -127,7 +135,7 @@
 
             <div class="addpostdiv d-flex align-items-center justify-content-between p-3">
                 <div class="dp1 d-flex gap-3 w-75">
-                    <img src="~/Content/images/user4.jpg" />
+                    <img src="@Url.Content(dpUrl)" />
 
                 </div>
                 <button type="button" class="btn btn-sm btn-success p-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Post</button>
@@ -172,32 +180,46 @@
             </div>
             <div class="PostsLists mt-5">
 
-                @* single post *@
-                <div class="Post ">
-                    <div class="PostTop p-3 row">
-                        <div class="dp2  col-2">
-                            <img src="~/Content/images/user4.jpg" />
+                @foreach (var post in postslist)
+                {
+                    <div class="Post ">
+                        <div class="PostTop p-3 row">
+                            <div class="dp2 col-2">
+
+                            @if (post.PosterImagePath != "" && post.PosterImagePath != null)
+                            {
+                                <img src="@Url.Content(post.PosterImagePath)" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/user.png" />
+                            }
+
+                            </div>
+                            <div class="col-8">
+                                <h6>@post.PosterName</h6>
+                                <p class="text-secondary ms-1" style="font-size:12px;">@post.PostTime</p>
+                            </div>
                         </div>
-                        <div class="col-8">
-                            <h6>Taqi Ahmed</h6>
-                            <p class="text-secondary ms-1" style="font-size:12px;">5 mins ago</p>
+                        <div class="postbody p-3">
+                            <p>@post.PostText</p>
+                            @if (post.PostImagePath != "" && post.PostImagePath != null)
+                            {
+                                    <img src="@Url.Content(post.PostImagePath)" />
+                            }
+                            
+
                         </div>
-                    </div>
-                    <div class="postbody p-3">
-                        <p>Hello there Sorry But I am sharing this!</p>
+                        <div class="d-flex justify-content-between postbottom px-4 mt-2 pb-1">
+                            <h5 class="likebtn"><i class=" fi-xwsuhl-thumb-solid"></i></h5>
+                            <p>@post.Likes people like this</p>
 
-                        <img src="~/Content/images/dank-meme-300x300.jpg" />
+                        </div>
 
-                    </div>
-                    <div class="postbottom p-3">
-                        <i class="fa fa-heart" aria-hidden="true"></i>
 
                     </div>
+                }
 
-
-                </div>
-                
-                @* -------- *@
             </div>
 
 
@@ -215,6 +237,7 @@
 <script>
 
     //login success message
+    console.log('@ViewBag.AllPosts')
 
     console.log('Tempdaata:', '@TempData["loginmessage"] ');
     if ('@TempData["loginmessage"]' != "") {
@@ -252,7 +275,7 @@
     // A $( document ).ready() block.
     $(document).ready(function () {
         console.log("ready!");
-        populatePosts()
+        
     });
 
     console.log('@Session["loggedinUser"]')
@@ -338,26 +361,7 @@
         });
     }
 
-    //function to populate the list of post 
-    function populatePosts() {
-
-
-
-        $.ajax({
-            type: "GET",
-            url: "/User/GetPosts",
-            
-            success: function (data) {
-                console.log(data)
-                
-
-
-                
-            }
-        });
-
-
-    }
+   
 
 
 

@@ -177,13 +177,28 @@
     position: absolute;
     right: 0;
     overflow-y: auto;
-    transform: translateX(350px);
-    transition: transform ease 1s;
+/*    transform: translateX(350px);
+    transition: transform ease 1s;*/
     padding: 1rem;
+    display:none;
 }
+
+.likebtnClicked {
+    display: inline-block;
+    margin: 0 0.5rem;
+    animation: bounce; /* referring directly to the animation's @keyframe declaration */
+    animation-duration: 2s; /* don't forget to set a duration! */
+}
+
+.likebtn:hover{
+    color:dodgerblue !important;
+    cursor:pointer;
+}
+
 
 .reqboxactive {
     transform: translateX(0px);
+    display:block;
 }
 #reqnot:hover{
     color:yellow;

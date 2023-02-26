@@ -31,28 +31,34 @@ namespace SocialNetwork_Dal.concrete
         //method to create a post
         public string CreatePost(Post post, int posterId)
         {
-            string extension = Path.GetExtension(post.PostImage.FileName);
+            //check extension if image exists
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
 
-            //check if extension is jpg, jpeg or png
-            if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
+            sqlParameters.Add(new SqlParameter("@posttext", post.PostText));
+            
+            sqlParameters.Add(new SqlParameter("@postedby", posterId));
+
+            if (post.PostImage != null)
             {
-
-
-                string filename = HttpContext.Current.User.Identity.Name + "_" + Path.GetFileName(post.PostImage.FileName) + Path.GetExtension(post.PostImage.FileName);
-
-                post.PostImagePath = "~/Content/PostImages/" + filename;
-
-                if (post.PostImage != null)
+                string extension = Path.GetExtension(post.PostImage.FileName);
+                //check if extension is jpg, jpeg or png
+                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
                 {
+
+
+                    string filename = HttpContext.Current.User.Identity.Name + "_" + Path.GetFileName(post.PostImage.FileName);
+
+                    post.PostImagePath = "~/Content/PostImages/" + filename;
+
                     string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/PostImages/"), filename);
                     //string path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/profilepics/"), HttpContext.Current.User.Identity.Name + "_" + Path.GetFileName((teacher.UserPic.FileName))+ Path.GetExtension(teacher.UserPic.FileName));
                     post.PostImage.SaveAs(path);
-                    List<SqlParameter> sqlParameters = new List<SqlParameter>();
-                    
-                    sqlParameters.Add(new SqlParameter("@posttext", post.PostText));
                     sqlParameters.Add(new SqlParameter("@postImage", post.PostImagePath));
-                    sqlParameters.Add(new SqlParameter("@postedby", posterId));
-                   
+
+                }
+
+            }
+             
                    
 
                     bool updated = db.execInsertProc("spCreatePost", sqlParameters);
@@ -62,10 +68,10 @@ namespace SocialNetwork_Dal.concrete
                         return "OK";
                     }
 
-                }
+                
 
 
-            }
+            
                 throw new NotImplementedException();
         }
         #endregion
@@ -341,7 +347,7 @@ namespace SocialNetwork_Dal.concrete
                     p.Id = Convert.ToInt32(r["PostId"]);
                     p.PostText = Convert.ToString(r["Text"]);
                     p.PostImagePath = Convert.ToString(r["PostImage"]);
-                    p.PostTime = Convert.ToDateTime(r["PostedAt"]);
+                    p.PostTime = Convert.ToString(r["PostedAt"]);
                     p.Likes = Convert.ToInt32(r["LikesCount"]);
                     p.PosterName = Convert.ToString(r["UserName"]);
                     p.PosterImagePath = Convert.ToString(r["ProfilePic"]);
