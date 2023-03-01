@@ -24,5 +24,6 @@ namespace SocialNetwork_Dal.Entities
         public string PosterName { get; set; }
         public string PosterImagePath { get; set; }
         public int Likes { get; set; }
+        public int IsLiked { get; set; }
     }
 }

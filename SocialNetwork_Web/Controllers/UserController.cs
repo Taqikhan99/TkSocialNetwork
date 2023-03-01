@@ -34,7 +34,7 @@ namespace SocialNetwork_Web.Controllers
             Session["frRequests"] = friendReqs;
             List<Post> allPosts = new List<Post>();
 
-            allPosts = userRepo.GetAllPosts();
+            allPosts = userRepo.GetAllPosts(u.Id);
 
             ViewBag.AllPosts = allPosts;
 
@@ -105,22 +105,7 @@ namespace SocialNetwork_Web.Controllers
             return Json("Ok", JsonRequestBehavior.AllowGet);
         }
         #endregion
-        ////upload profile pic
-        //[HttpPost]
-        //public ActionResult UpdateProfile(HttpPostedFileBase file)
-        //{
-        //    try
-        //    {
-
-
-        //        return Json("Ok", JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        TempData["message"] = ex.Message;
-        //        return RedirectToAction("ErrorPage", "Accounts");
-        //    }
-        //}
+      
 
         #region Adding new post
 
@@ -132,20 +117,25 @@ namespace SocialNetwork_Web.Controllers
         {
             try
             {
-                var currentUser = (SocialNetwork_Dal.Entities.User)Session["loggedinUser"];
-                if (currentUser != null)
+                if(ModelState.IsValid)
                 {
-                    string message = userRepo.CreatePost(post, currentUser.Id);
-
-                    //check if post created
-                    if (message == "OK")
+                    var currentUser = (SocialNetwork_Dal.Entities.User)Session["loggedinUser"];
+                    if (currentUser != null)
                     {
+                        string message = userRepo.CreatePost(post, currentUser.Id);
 
-                        TempData["postmessage"] = "Post Created Successfully";
-                        return RedirectToAction("Index");
+                        //check if post created
+                        if (message == "OK")
+                        {
+
+                            TempData["postmessage"] = "Post Created Successfully";
+                            return RedirectToAction("Index");
+                        }
+
                     }
-
                 }
+
+               
                 TempData["message"] = "Post Not Created";
                 return RedirectToAction("ErrorPage", "Accounts");
 
@@ -305,6 +295,61 @@ namespace SocialNetwork_Web.Controllers
         #endregion
 
 
-        
+
+        #region Like Post
+
+        [HttpPost]
+        public ActionResult LikePost(int postId)
+        {
+            try
+            {
+                var currentUser = (SocialNetwork_Dal.Entities.User)Session["loggedinUser"];
+
+                bool liked=userRepo.LikePost( postId, currentUser.Id);
+                if(liked )
+                {
+                    return Json(new { message = "Like Success", code = 1 }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { message = "Like Failed", code = 2 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+                return RedirectToAction("ErrorPage", "Accounts");
+            }
+
+            
+
+        }
+
+        #endregion
+
+
+        //#region Get and show posts
+
+        //public ActionResult GetPosts()
+        //{
+        //    try
+        //    {
+        //        List<Post> allPosts = new List<Post>();
+
+        //        allPosts = userRepo.GetAllPosts();
+
+        //        if (allPosts.Count > 0)
+        //        {
+        //            return Json(new { posts = allPosts, code = 1 }, JsonRequestBehavior.AllowGet);
+        //        }
+        //        return Json(new { message = "Get Posts Success", code = 2 }, JsonRequestBehavior.AllowGet);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["message"] = ex.Message;
+        //        return RedirectToAction("ErrorPage", "Account");
+        //    }
+
+        //    #endregion
+
+        //}
     }
 }

@@ -333,10 +333,12 @@ namespace SocialNetwork_Dal.concrete
 
         #region Get and show all posts
 
-        public List<Post> GetAllPosts()
+        public List<Post> GetAllPosts(int id)
         {
             List<Post> posts = new List<Post>();
-            DataTable dt = db.execGetProc("spGetAllPosts");
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("@curruserId", id));
+            DataTable dt = db.execGetProc("spGetAllPosts",sqlParameters);
 
             if (dt.Rows.Count > 0)
             {
@@ -351,12 +353,30 @@ namespace SocialNetwork_Dal.concrete
                     p.Likes = Convert.ToInt32(r["LikesCount"]);
                     p.PosterName = Convert.ToString(r["UserName"]);
                     p.PosterImagePath = Convert.ToString(r["ProfilePic"]);
+                    p.IsLiked= Convert.ToInt32(r["Liked"]);
 
                     posts.Add(p);
 
                 }
             }
             return posts;
+        }
+
+        #endregion
+
+
+        #region likpost
+        public bool LikePost(int postid,int userid)
+        {
+
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+
+            sqlParameters.Add(new SqlParameter("@postid", postid));
+
+            sqlParameters.Add(new SqlParameter("@userid", userid));
+
+            bool LikedPost = db.execInsertProc("spLikePost", sqlParameters);
+            return LikedPost;
         }
 
         #endregion

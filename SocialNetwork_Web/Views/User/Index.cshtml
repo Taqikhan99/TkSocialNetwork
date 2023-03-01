@@ -66,15 +66,15 @@
             </div>
 
 
-            <div class="suggestionslink mt-4 p-1">
+            <!--<div class="suggestionslink mt-4 p-1">
                 <div class="mb-1d-flex">
                     <h5>Suggestions</h5>
 
                 </div>
                 <hr />
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column">-->
                     @* one suggested user *@
-                    <div class="suggested p-2 mb-2">
+                    <!--<div class="suggested p-2 mb-2">
                         <div class="suggImg">
                             <img src="~/Content/images/user1.jpg" />
                         </div>
@@ -88,9 +88,9 @@
                                 +
                             </button>
                         </div>
-                    </div>
+                    </div>-->
                     @* ---------------------- *@
-                    <div class="suggested p-2 mb-2">
+                    <!--<div class="suggested p-2 mb-2">
                         <div class="suggImg">
                             <img src="~/Content/images/user2.jpg" />
                         </div>
@@ -104,9 +104,9 @@
                                 +
                             </button>
                         </div>
-                    </div>
+                    </div>-->
                     @* ---------------------- *@
-                    <div class="suggested p-2 mb-2">
+                    <!--<div class="suggested p-2 mb-2">
                         <div class="suggImg">
                             <img src="~/Content/images/user3.jpg" />
                         </div>
@@ -120,13 +120,13 @@
                                 +
                             </button>
                         </div>
-                    </div>
+                    </div>-->
                     @* ---------------------- *@
-                    <div class="text-center">
+                    <!--<div class="text-center">
                         @Html.ActionLink("ProfilePage", "UserProfile", "User", new { id = currentUser.Id}, new { @class = "text-danger ", @style = "text-decoration:none;" })
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
      
 
@@ -166,7 +166,7 @@
 
 
                                 <img id="uploadedimg" class="w-75 mx-auto" style="display:block; height:200px;width:300px;" src="" alt="your image" />
-                                <button  id="confirmPost" type="submit" class="btn btn-primary">Post</button>
+                                <button  id="confirmPost" type="submit" onclick="return validateForm()" class="btn btn-primary">Post</button>
                             </form>
 
 
@@ -198,6 +198,7 @@
                             </div>
                             <div class="col-8">
                                 <h6>@post.PosterName</h6>
+                                
                                 <p class="text-secondary ms-1" style="font-size:12px;">@post.PostTime</p>
                             </div>
                         </div>
@@ -211,8 +212,18 @@
 
                         </div>
                         <div class="d-flex justify-content-between postbottom px-4 mt-2 pb-1">
-                            <h5 class="likebtn"><i class=" fi-xwsuhl-thumb-solid"></i></h5>
-                            <p>@post.Likes people like this</p>
+
+                            @if (post.IsLiked == 1)
+                            {
+
+                                <h4 onclick="ClickLikeBtn(this,@post.Id)" class="likebtn LikeColored"><i class="bi bi-hand-thumbs-up-fill"></i></h4>
+                            }
+                            else
+                            {
+                                <h4 onclick="ClickLikeBtn(this,@post.Id)" class="likebtn "><i class="bi bi-hand-thumbs-up-fill"></i></h4>
+                            }
+
+                            <p><span class="likeCount">@post.Likes</span> people like this</p>
 
                         </div>
 
@@ -239,7 +250,48 @@
     //login success message
     console.log('@ViewBag.AllPosts')
 
-    console.log('Tempdaata:', '@TempData["loginmessage"] ');
+
+    function ClickLikeBtn(id, postId) {
+
+        var postLikes = id.nextSibling.nextSibling.getElementsByClassName('likeCount')[0]
+
+        console.log('PLikes: ', postLikes)
+        if (id.classList.contains('LikeColored')) {
+            postLikes.innerHTML = parseInt(postLikes.innerHTML) - 1
+        }
+        else {
+            postLikes.innerHTML = parseInt(postLikes.innerHTML) +1
+        }
+
+        console.log(id);
+        console.log('Sibling: ', parseInt( id.nextSibling.nextSibling.getElementsByClassName('likeCount')[0].innerHTML))
+        console.log('postid: ', postId);
+        id.classList.add("likebtnClicked");
+        id.classList.toggle("LikeColored");
+        setTimeout(function () {
+            id.classList.remove("likebtnClicked")
+        }, 1500);
+        $.ajax({
+            type: "POST",
+            url: "/User/LikePost",
+            data: { postId },
+           
+            success: function (data) {
+                
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+    @*console.log('Tempdaata:', '@TempData["loginmessage"] ');*@
     if ('@TempData["loginmessage"]' != "") {
         swal({
             title: "Succss",
@@ -304,27 +356,25 @@
 
     }
 
-
-
     //create a post
 
-    function clickPost() {
+    function validateForm() {
 
         var postText = document.getElementById("posttext").value;
         var postImage = document.getElementById("imginputPost").files[0];
 
-        console.log(postImage);
-        if (postText == "") {
+        console.log('postText:',postText);
+        console.log('postText:', postImage);
+        if (postText == "" || postText==null) {
             callErrorAlert("Must Provide Some Text to Post");
+            return false
         }
-        else {
-            var post = {
-                postText,
-                //postImage
-            }
-            console.log(post);
-            PostSubmit(post)
+
+        if (postImage == "" || postImage == null) {
+            callErrorAlert("Must Provide Some Image to Post");
+            return false
         }
+        
     }
 
     //submit form of post
@@ -337,7 +387,10 @@
             processData: false,
             contentType:false,
             success: function (data) {
-                console.log(data)
+                if (data.code == 1) {
+
+                    console.log(data);
+                }
             }
         });
 
