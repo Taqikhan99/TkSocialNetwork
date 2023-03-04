@@ -36,13 +36,13 @@ This is a Social Media Website project made in asp.net mvc 5 and sql server data
 ![Friends page](WorkingImages/friends.PNG)
 
 ### All People
-![All people](WorkingImages/people.PNG)
+![All people](WorkingImages/peoples.PNG)
 
 ### Others Profile
 ![other](WorkingImages/othersprofile.PNG)
 
 ### own Profile
-![own](WorkingImages/ownprofile.PNG)
+![own](WorkingImages/viewownprofile.PNG)
 
 ### edit Profile
 ![edit](WorkingImages/editprofile.PNG)
