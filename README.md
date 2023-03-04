@@ -23,4 +23,29 @@ This is a Social Media Website project made in asp.net mvc 5 and sql server data
 - git
 ## Project Working
 
+### Login Page
 ![Login page](WorkingImages/login.PNG)
+
+### Register Page
+![Reg page](WorkingImages/register.PNG)
+
+### Homepage
+![Home page](WorkingImages/homepage.PNG)
+
+### My Friends
+![Friends page](WorkingImages/friends.PNG)
+
+### All People
+![All people](WorkingImages/people.PNG)
+
+### Others Profile
+![other](WorkingImages/othersprofile.PNG)
+
+### own Profile
+![own](WorkingImages/ownprofile.PNG)
+
+### edit Profile
+![edit](WorkingImages/editprofile.PNG)
+
+### add post
+![add post](WorkingImages/addpost.PNG)
